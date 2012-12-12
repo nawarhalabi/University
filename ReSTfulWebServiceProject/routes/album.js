@@ -24,11 +24,16 @@ exports.add = function(req, res)
 	var albums = createSchema();
 	var albumModel = conn.model('album', albums);
 	
-	function adderr(err){console.log('Add Error:' + err)};
-var newAuthor = new authorModel();
-newAuthor.name = 'Wang';
-newAuthor.email = 'crazykevin777@gmail.com';
-newAuthor.save(adderr);
+	function addErr(err){console.log('Add Error: Error while adding and album to the album collection un response to a post http request' + err)};
+	var newAlbum = new albumModel();
+	
+	var json = req.body;
+	
+	newAlbum.name = json.name;
+	newAlbum.author = json.author;
+	newAlbum.comments = [];
+	
+	newAlbum.save(adderr);
 }
 
 exports.getAll = function(req, res){
