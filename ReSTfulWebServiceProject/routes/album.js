@@ -1,7 +1,13 @@
+//Errors:------------------------------------------------------------------------------------------------------
+var addErr = function(err){console.log('Add Error: Error while adding and album to the album collection un response to a post http request' + err)};	
+//-------------------------------------------------------------------------------------------------------------
+
 function createSchema()
 {
+	var mongoose = require('mongoose');
 	var albums = new mongoose.Schema({
-	name: {type: String, requiered: true},
+	id: {type: String, required: true, index:{unique:true}},
+	name: {type: String, required: true},
 	author: { type: String, required: true, ref: 'author'},
 	metadata: {
 		description: String,
@@ -21,19 +27,24 @@ exports.add = function(req, res)
 {
 	var mongoose = require('mongoose');
 	var conn = mongoose.createConnection('mongodb://localhost/Gallerydb');
-	var albums = createSchema();
-	var albumModel = conn.model('album', albums);
+	conn.on('error', console.error.bind(console, 'connection error:'));
+	conn.once('open', function callback () {
 	
-	function addErr(err){console.log('Add Error: Error while adding and album to the album collection un response to a post http request' + err)};
-	var newAlbum = new albumModel();
+		var albums = createSchema();
+		var albumModel = conn.model('album', albums);
 	
-	var json = req.body;
+		var newAlbum = new albumModel();
 	
-	newAlbum.name = json.name;
-	newAlbum.author = json.author;
-	newAlbum.comments = [];
+		var json = req.body;
 	
-	newAlbum.save(adderr);
+		newAlbum.name = json.name;
+		newAlbum.author = json.author;
+		newAlbum.comments = [];
+		newAlbum.id = newAlbum._id;
+	
+		newAlbum.save(addErr);
+
+		});
 }
 
 exports.getAll = function(req, res){

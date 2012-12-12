@@ -59,17 +59,19 @@ tag_image.index({image: 1, tag: 1},{unique: true});
 var tag_imageModel = conn.model('tag_image', tag_image);
 
 var images = new mongoose.Schema({
-name: {type: String, requiered: true},
-album: { type: Schema.Types.ObjectId, required: true, ref: 'album' },
-metadata: {
-	author: { type: String, required: true, ref: 'author' },
-	description: String,
-	date_added: { type: Date, default: Date.now },
-	format: String},
-comments: [{
-	date: { type: Date, default: Date.now },
-	text: String,
-	author: { type: String, required: true, ref: 'author' }
+	id: { type: String, required:true, index:{unique: true}},
+	name: {type: String, requiered: true},
+	album: { type: Schema.Types.ObjectId, required: true, ref: 'album' },
+	metadata: {
+		author: { type: String, required: true, ref: 'author' },
+		description: String,
+		date_added: { type: Date, default: Date.now },
+		format: String},
+	comments: [{
+		id: { type: String, required:true, index:{unique: true}},
+		date: { type: Date, default: Date.now },
+		text: String,
+		author: { type: String, required: true, ref: 'author' }
 }]
 });
 images.index({name:1,album:1},{unique:true});
@@ -82,6 +84,7 @@ metadata: {
 	description: String,
 	date_added: { type: Date, default: Date.now }},
 comments: [{
+	id: { type: String, required:true, index:{unique: true}},
 	date: { type: Date, default: Date.now },
 	text: String,
 	author: { type: String, required: true, ref: 'author' }
