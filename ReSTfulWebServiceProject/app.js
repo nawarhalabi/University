@@ -151,7 +151,7 @@ app.get('/albums/:albumid/images/:imageid/comments/:commentid', imageComment.get
 
 /*Delete---------------------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------------------------*/
-app.delete('/albums',album.deleteAll);
+app.delete('/albums',album.deleteAll);//Don't do this
 app.delete('/albums/:albumid', album.delete);
 app.delete('/albums/:albumid/metadata', albumMetadata.delete);
 app.delete('/albums/:albumid/comments', albumComment.deleteAll);
