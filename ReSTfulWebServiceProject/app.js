@@ -41,7 +41,7 @@ app.configure('development', function(){
 /*------------------------------------------------------------------------------------------*/
 var conn = mongoose.createConnection('mongodb://localhost/Gallerydb');
 var Schema = mongoose.Schema;
-console.log('jk');
+
 conn.on('error', console.error.bind(console, 'connection error:'));
 conn.once('open', function callback () {
   console.log('Connected to Database!!');
@@ -150,7 +150,7 @@ app.get('/albums/:albumid/images/:imageid/comments', imageComment.getAll);
 app.get('/albums/:albumid/images/:imageid/comments/:commentid', imageComment.get);
 
 /*Delete---------------------------------------------------------------------------------------*/
-/*--------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------------*/
 app.delete('/albums',album.deleteAll);
 app.delete('/albums/:albumid', album.delete);
 app.delete('/albums/:albumid/metadata', albumMetadata.delete);
@@ -175,7 +175,7 @@ app.post('/albums/:albumid/images/:imageid/comments',imageComment.add);
 app.post('/albums/:albumid/images/:imageid/comments/:commentid', imageComment.update);
 /*Put---------------------------------------------------------------------------------------*/
 /*------------------------------------------------------------------------------------------*/
-app.put('/albums', album.create);
+app.put('/albums', album.create);//Don't do it, Nawar will.
 app.put('/albums/:albumid', album.add);
 app.put('/albums/:albumid/metadata', albumMetadata.create);
 app.put('/albums/:albumid/comments', albumComment.create);

@@ -83,3 +83,40 @@ query.exec(function (err, records) {
 	}
 });
 }
+
+exports.get = function(req, res){
+var mongoose = require('mongoose');
+var conn = mongoose.createConnection('mongodb://localhost/Gallerydb');
+var albums = createSchema();
+var albumModel = conn.model('album', albums);
+
+var query = albumModel.find({id: req.params.albumid});
+
+query.exec(function (err, records) {
+  if (err)
+	{  
+		console.log('Error displaying all albums (Could be database connection problem): ' + err);
+		res.writeHead(400, {'content-type': 'application/json'});
+		res.end(err);
+	}
+  else 
+  {
+	res.writeHead(200, {'content-type': 'application/json'});
+	res.write('{[');
+	if(records != null)
+	{
+		
+		var i = records.length;
+		records.forEach(function(record){
+			res.write('{"name" : "' + record.name + '"}');
+			
+			i=i-1;
+			console.log(i);
+			if(i!==0)
+				res.write(',');
+			});
+	}
+	res.end(']}');
+	}
+});
+}
