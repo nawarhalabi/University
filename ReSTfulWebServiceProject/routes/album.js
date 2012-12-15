@@ -2,15 +2,17 @@
 var addErr = function(err){console.log('Add Error: Error while adding and album to the album collection un response to a post http request' + err)};	
 //-------------------------------------------------------------------------------------------------------------
 
-function error(code, res, err)
+function status(code, res, err)
 {
 	if(code==200)//OK on get requests
 	{
-		
+		res.writeHead('HTTP/1.1 '+200+' OK', {'content-length': 0, 'Date': Date.now});
+		res.end('');
 	}
 	if(code==201)//OK created
 	{
-		
+		res.writeHead('HTTP/1.1 '+201+' OK', {'content-length': 0, 'Date': Date.now});
+		res.end('');	
 	}
 	if(code==404)//Resource not found
 	{
@@ -115,7 +117,7 @@ query.exec(function (err, records) {
 	}
 });
 }
-
+/*
 exports.get = function(req, res){
 var mongoose = require('mongoose');
 var conn = mongoose.createConnection('mongodb://localhost/Gallerydb');
@@ -127,7 +129,7 @@ var query = albumModel.find({id: req.params.albumid});
 query.exec(function (err, records) {
   if (err)
 	{  
-		console.log('Error displaying album:'' (Could be database connection problem): ' + err);
+		console.log('Error displaying album: (Could be database connection problem): ' + err);
 		res.writeHead(400, {'content-type': 'application/json'});
 		res.end(err);
 	}
@@ -152,7 +154,7 @@ query.exec(function (err, records) {
 	}
 });
 }
-
+*/
 exports.delete = function(req, res){
 var mongoose = require('mongoose');
 var conn = mongoose.createConnection('mongodb://localhost/Gallerydb');
@@ -164,18 +166,23 @@ conn.once('open', function callback () {
 	
 	var query = albumModel.findOne({'id': req.params.albumid});
 	query.exec(function (err, album) {
-		if (err) console.log('retrieve error in the delete route:' + err);
-		res.writeHead();
-		res.end('{"error message": '+ err +'}');
-		else 
-		if(album != null)
+		if (err) 
 		{
-			album.remove();
+			console.log('retrieve error in the delete route:' + err);
+			res.writeHead();
+			res.end('{"error message": '+ err +'}');
 		}
-		else
+		else 
 		{
+			if(album != null)
+			{
+				album.remove();
+			}
+			else
+			{
 			
+			}
 		}
     });	
-}
+});
 }
