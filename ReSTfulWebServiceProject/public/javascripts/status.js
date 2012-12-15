@@ -14,11 +14,11 @@ exports.status = function (code, res, err)
 	{
 		
 	}
-	if(code==409)//Conflict on posts or puts
+	if(code==406)//Method not acceptable
 	{
 		
 	}
-	if(code==500)//Server error e.g. database off
+	if(code==409)//Conflict on posts or puts
 	{
 		
 	}
@@ -26,8 +26,10 @@ exports.status = function (code, res, err)
 	{
 		
 	}
-	if(code==406)//Method not acceptable
+	if(code==500)//Server error e.g. database off
 	{
 		
 	}
+
+
 }

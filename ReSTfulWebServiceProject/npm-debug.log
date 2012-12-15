@@ -1,0 +1,209 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   'bson' ]
+2 info using npm@1.1.63
+3 info using node@v0.8.12
+4 verbose node symlink C:\Program Files\nodejs\\node.exe
+5 verbose read json U:\Nawar's Repos\University\University\ReSTfulWebServiceProject\package.json
+6 warn package.json application-name@0.0.1 No README.md file found!
+7 verbose read json U:\Nawar's Repos\University\University\ReSTfulWebServiceProject\node_modules\express\package.json
+8 verbose read json U:\Nawar's Repos\University\University\ReSTfulWebServiceProject\node_modules\jade\package.json
+9 verbose read json U:\Nawar's Repos\University\University\ReSTfulWebServiceProject\node_modules\mongodb\package.json
+10 verbose read json U:\Nawar's Repos\University\University\ReSTfulWebServiceProject\node_modules\mongoose\package.json
+11 verbose from cache U:\Nawar's Repos\University\University\ReSTfulWebServiceProject\package.json
+12 verbose readDependencies using package.json deps
+13 verbose cache add [ 'bson@0.1.1', null ]
+14 silly cache add name=undefined spec="bson@0.1.1" args=["bson@0.1.1",null]
+15 verbose parsed url { pathname: 'bson@0.1.1',
+15 verbose parsed url   path: 'bson@0.1.1',
+15 verbose parsed url   href: 'bson@0.1.1' }
+16 silly cache add name="bson" spec="0.1.1" args=["bson","0.1.1"]
+17 verbose parsed url { pathname: '0.1.1', path: '0.1.1', href: '0.1.1' }
+18 verbose addNamed [ 'bson', '0.1.1' ]
+19 verbose addNamed [ '0.1.1', '0.1.1' ]
+20 silly lockFile 9fcd5433-bson-0-1-1 bson@0.1.1
+21 verbose lock bson@0.1.1 C:\Users\Nawar Halabi\AppData\Roaming\npm-cache\9fcd5433-bson-0-1-1.lock
+22 verbose url raw bson/0.1.1
+23 verbose url resolving [ 'https://registry.npmjs.org/', './bson/0.1.1' ]
+24 verbose url resolved https://registry.npmjs.org/bson/0.1.1
+25 info trying registry request attempt 1 at 17:19:07
+26 verbose etag "T4QAX1VDO5M9HDI9OQLS63Y8"
+27 http GET https://registry.npmjs.org/bson/0.1.1
+28 http 304 https://registry.npmjs.org/bson/0.1.1
+29 silly registry.get cb [ 304,
+29 silly registry.get   { server: 'CouchDB/1.2.0 (Erlang OTP/R15B)',
+29 silly registry.get     etag: '"T4QAX1VDO5M9HDI9OQLS63Y8"',
+29 silly registry.get     date: 'Sat, 15 Dec 2012 17:18:13 GMT',
+29 silly registry.get     'content-length': '0' } ]
+30 verbose etag bson/0.1.1 from cache
+31 verbose read json C:\Users\Nawar Halabi\AppData\Roaming\npm-cache\bson\0.1.1\package\package.json
+32 warn package.json bson@0.1.1 No README.md file found!
+33 silly lockFile 9fcd5433-bson-0-1-1 bson@0.1.1
+34 silly resolved [ { name: 'bson',
+34 silly resolved     description: 'A bson parser for node.js and the browser',
+34 silly resolved     keywords: [ 'mongodb', 'bson', 'parser' ],
+34 silly resolved     version: '0.1.1',
+34 silly resolved     author: { name: 'Christian Amor Kvalheim', email: 'christkv@gmail.com' },
+34 silly resolved     contributors: [],
+34 silly resolved     repository: { type: 'git', url: 'git@github.com:mongodb/js-bson.git' },
+34 silly resolved     bugs:
+34 silly resolved      { mail: 'node-mongodb-native@googlegroups.com',
+34 silly resolved        url: 'https://github.com/mongodb/js-bson/issues' },
+34 silly resolved     devDependencies: { nodeunit: '0.7.3', gleak: '0.2.3' },
+34 silly resolved     config: { native: false },
+34 silly resolved     main: './lib/bson/index',
+34 silly resolved     directories: { lib: './lib/bson' },
+34 silly resolved     engines: { node: '>=0.4.0' },
+34 silly resolved     scripts: { install: 'node install.js', test: 'make test' },
+34 silly resolved     licenses: [ [Object] ],
+34 silly resolved     readme: 'ERROR: No README.md file found!',
+34 silly resolved     _id: 'bson@0.1.1',
+34 silly resolved     _from: 'bson@0.1.1' } ]
+35 info install bson@0.1.1 into U:\Nawar's Repos\University\University\ReSTfulWebServiceProject
+36 info installOne bson@0.1.1
+37 verbose from cache C:\Users\Nawar Halabi\AppData\Roaming\npm-cache\bson\0.1.1\package\package.json
+38 info U:\Nawar's Repos\University\University\ReSTfulWebServiceProject\node_modules\bson unbuild
+39 verbose read json U:\Nawar's Repos\University\University\ReSTfulWebServiceProject\node_modules\bson\package.json
+40 verbose tar unpack C:\Users\Nawar Halabi\AppData\Roaming\npm-cache\bson\0.1.1\package.tgz
+41 silly lockFile 08cca29b-ServiceProject-node-modules-bson U:\Nawar's Repos\University\University\ReSTfulWebServiceProject\node_modules\bson
+42 verbose lock U:\Nawar's Repos\University\University\ReSTfulWebServiceProject\node_modules\bson C:\Users\Nawar Halabi\AppData\Roaming\npm-cache\08cca29b-ServiceProject-node-modules-bson.lock
+43 silly gunzTarPerm modes [ '755', '644' ]
+44 silly gunzTarPerm extractEntry package.json
+45 silly gunzTarPerm modified mode [ 'package.json', 438, 420 ]
+46 silly gunzTarPerm extractEntry README
+47 silly gunzTarPerm modified mode [ 'README', 438, 420 ]
+48 silly gunzTarPerm extractEntry install.js
+49 silly gunzTarPerm modified mode [ 'install.js', 438, 420 ]
+50 silly gunzTarPerm extractEntry .travis.yml
+51 silly gunzTarPerm modified mode [ '.travis.yml', 438, 420 ]
+52 silly gunzTarPerm extractEntry benchmarks/benchmarks.js
+53 silly gunzTarPerm modified mode [ 'benchmarks/benchmarks.js', 438, 420 ]
+54 silly gunzTarPerm extractEntry ext/.npmignore
+55 silly gunzTarPerm modified mode [ 'ext/.npmignore', 438, 420 ]
+56 silly gunzTarPerm extractEntry ext/index.js
+57 silly gunzTarPerm modified mode [ 'ext/index.js', 438, 420 ]
+58 silly gunzTarPerm extractEntry ext/bson.cc
+59 silly gunzTarPerm modified mode [ 'ext/bson.cc', 438, 420 ]
+60 silly gunzTarPerm extractEntry ext/bson.h
+61 silly gunzTarPerm modified mode [ 'ext/bson.h', 438, 420 ]
+62 silly gunzTarPerm extractEntry ext/Makefile
+63 silly gunzTarPerm modified mode [ 'ext/Makefile', 438, 420 ]
+64 silly gunzTarPerm extractEntry ext/wscript
+65 silly gunzTarPerm modified mode [ 'ext/wscript', 438, 420 ]
+66 silly gunzTarPerm extractEntry lib/bson/binary.js
+67 silly gunzTarPerm modified mode [ 'lib/bson/binary.js', 438, 420 ]
+68 silly gunzTarPerm extractEntry lib/bson/code.js
+69 silly gunzTarPerm modified mode [ 'lib/bson/code.js', 438, 420 ]
+70 silly gunzTarPerm extractEntry lib/bson/db_ref.js
+71 silly gunzTarPerm modified mode [ 'lib/bson/db_ref.js', 438, 420 ]
+72 silly gunzTarPerm extractEntry lib/bson/double.js
+73 silly gunzTarPerm modified mode [ 'lib/bson/double.js', 438, 420 ]
+74 silly gunzTarPerm extractEntry lib/bson/float_parser.js
+75 silly gunzTarPerm modified mode [ 'lib/bson/float_parser.js', 438, 420 ]
+76 silly gunzTarPerm extractEntry lib/bson/bson.js
+77 silly gunzTarPerm modified mode [ 'lib/bson/bson.js', 438, 420 ]
+78 silly gunzTarPerm extractEntry lib/bson/long.js
+79 silly gunzTarPerm modified mode [ 'lib/bson/long.js', 438, 420 ]
+80 silly gunzTarPerm extractEntry lib/bson/max_key.js
+81 silly gunzTarPerm modified mode [ 'lib/bson/max_key.js', 438, 420 ]
+82 silly gunzTarPerm extractEntry lib/bson/min_key.js
+83 silly gunzTarPerm modified mode [ 'lib/bson/min_key.js', 438, 420 ]
+84 silly gunzTarPerm extractEntry lib/bson/objectid.js
+85 silly gunzTarPerm modified mode [ 'lib/bson/objectid.js', 438, 420 ]
+86 silly gunzTarPerm extractEntry lib/bson/symbol.js
+87 silly gunzTarPerm modified mode [ 'lib/bson/symbol.js', 438, 420 ]
+88 silly gunzTarPerm extractEntry lib/bson/binary_parser.js
+89 silly gunzTarPerm modified mode [ 'lib/bson/binary_parser.js', 438, 420 ]
+90 silly gunzTarPerm extractEntry lib/bson/timestamp.js
+91 silly gunzTarPerm modified mode [ 'lib/bson/timestamp.js', 438, 420 ]
+92 silly gunzTarPerm extractEntry lib/bson/index.js
+93 silly gunzTarPerm modified mode [ 'lib/bson/index.js', 438, 420 ]
+94 silly gunzTarPerm extractEntry Makefile
+95 silly gunzTarPerm modified mode [ 'Makefile', 438, 420 ]
+96 silly gunzTarPerm extractEntry test/browser/bson_test.js
+97 silly gunzTarPerm modified mode [ 'test/browser/bson_test.js', 438, 420 ]
+98 silly gunzTarPerm extractEntry test/browser/nodeunit.js
+99 silly gunzTarPerm modified mode [ 'test/browser/nodeunit.js', 438, 420 ]
+100 silly gunzTarPerm extractEntry test/browser/suite2.js
+101 silly gunzTarPerm modified mode [ 'test/browser/suite2.js', 438, 420 ]
+102 silly gunzTarPerm extractEntry test/browser/suite3.js
+103 silly gunzTarPerm modified mode [ 'test/browser/suite3.js', 438, 420 ]
+104 silly gunzTarPerm extractEntry test/browser/test.html
+105 silly gunzTarPerm modified mode [ 'test/browser/test.html', 438, 420 ]
+106 silly gunzTarPerm extractEntry test/node/bson_array_test.js
+107 silly gunzTarPerm modified mode [ 'test/node/bson_array_test.js', 438, 420 ]
+108 silly gunzTarPerm extractEntry test/node/bson_parser_comparision_test.js
+109 silly gunzTarPerm modified mode [ 'test/node/bson_parser_comparision_test.js', 438, 420 ]
+110 silly gunzTarPerm extractEntry test/node/bson_test.js
+111 silly gunzTarPerm modified mode [ 'test/node/bson_test.js', 438, 420 ]
+112 silly gunzTarPerm extractEntry test/node/bson_typed_array_test.js
+113 silly gunzTarPerm modified mode [ 'test/node/bson_typed_array_test.js', 438, 420 ]
+114 silly gunzTarPerm extractEntry test/node/test_full_bson.js
+115 silly gunzTarPerm modified mode [ 'test/node/test_full_bson.js', 438, 420 ]
+116 silly gunzTarPerm extractEntry test/node/to_bson_test.js
+117 silly gunzTarPerm modified mode [ 'test/node/to_bson_test.js', 438, 420 ]
+118 silly gunzTarPerm extractEntry test/node/data/test_gs_weird_bug.png
+119 silly gunzTarPerm modified mode [ 'test/node/data/test_gs_weird_bug.png', 438, 420 ]
+120 silly gunzTarPerm extractEntry test/node/tools/utils.js
+121 silly gunzTarPerm modified mode [ 'test/node/tools/utils.js', 438, 420 ]
+122 silly gunzTarPerm extractEntry tools/gleak.js
+123 silly gunzTarPerm modified mode [ 'tools/gleak.js', 438, 420 ]
+124 silly gunzTarPerm extractEntry tools/jasmine-1.1.0/jasmine-html.js
+125 silly gunzTarPerm modified mode [ 'tools/jasmine-1.1.0/jasmine-html.js', 438, 420 ]
+126 silly gunzTarPerm extractEntry tools/jasmine-1.1.0/jasmine.js
+127 silly gunzTarPerm modified mode [ 'tools/jasmine-1.1.0/jasmine.js', 438, 420 ]
+128 silly gunzTarPerm extractEntry tools/jasmine-1.1.0/jasmine.css
+129 silly gunzTarPerm modified mode [ 'tools/jasmine-1.1.0/jasmine.css', 438, 420 ]
+130 silly gunzTarPerm extractEntry tools/jasmine-1.1.0/jasmine_favicon.png
+131 silly gunzTarPerm modified mode [ 'tools/jasmine-1.1.0/jasmine_favicon.png', 438, 420 ]
+132 silly gunzTarPerm extractEntry tools/jasmine-1.1.0/MIT.LICENSE
+133 silly gunzTarPerm modified mode [ 'tools/jasmine-1.1.0/MIT.LICENSE', 438, 420 ]
+134 verbose read json U:\Nawar's Repos\University\University\ReSTfulWebServiceProject\node_modules\bson\package.json
+135 silly lockFile 08cca29b-ServiceProject-node-modules-bson U:\Nawar's Repos\University\University\ReSTfulWebServiceProject\node_modules\bson
+136 info preinstall bson@0.1.1
+137 verbose from cache U:\Nawar's Repos\University\University\ReSTfulWebServiceProject\node_modules\bson\package.json
+138 verbose readDependencies using package.json deps
+139 verbose from cache U:\Nawar's Repos\University\University\ReSTfulWebServiceProject\node_modules\bson\package.json
+140 verbose readDependencies using package.json deps
+141 silly resolved []
+142 verbose about to build U:\Nawar's Repos\University\University\ReSTfulWebServiceProject\node_modules\bson
+143 info build U:\Nawar's Repos\University\University\ReSTfulWebServiceProject\node_modules\bson
+144 verbose from cache U:\Nawar's Repos\University\University\ReSTfulWebServiceProject\node_modules\bson\package.json
+145 verbose linkStuff [ false,
+145 verbose linkStuff   false,
+145 verbose linkStuff   false,
+145 verbose linkStuff   'U:\\Nawar\'s Repos\\University\\University\\ReSTfulWebServiceProject\\node_modules' ]
+146 info linkStuff bson@0.1.1
+147 verbose linkBins bson@0.1.1
+148 verbose linkMans bson@0.1.1
+149 verbose rebuildBundles bson@0.1.1
+150 info install bson@0.1.1
+151 verbose unsafe-perm in lifecycle true
+152 silly exec cmd "/c" "node install.js"
+153 silly cmd,/c,node install.js,U:\Nawar's Repos\University\University\ReSTfulWebServiceProject\node_modules\bson spawning
+154 info bson@0.1.1 Failed to exec install script
+155 info U:\Nawar's Repos\University\University\ReSTfulWebServiceProject\node_modules\bson unbuild
+156 verbose from cache U:\Nawar's Repos\University\University\ReSTfulWebServiceProject\node_modules\bson\package.json
+157 info preuninstall bson@0.1.1
+158 info uninstall bson@0.1.1
+159 verbose true,U:\Nawar's Repos\University\University\ReSTfulWebServiceProject\node_modules,U:\Nawar's Repos\University\University\ReSTfulWebServiceProject\node_modules unbuild bson@0.1.1
+160 info postuninstall bson@0.1.1
+161 error bson@0.1.1 install: `node install.js`
+161 error `cmd "/c" "node install.js"` failed with 127
+162 error Failed at the bson@0.1.1 install script.
+162 error This is most likely a problem with the bson package,
+162 error not with npm itself.
+162 error Tell the author that this fails on your system:
+162 error     node install.js
+162 error You can get their info via:
+162 error     npm owner ls bson
+162 error There is likely additional logging output above.
+163 error System Windows_NT 6.1.7601
+164 error command "C:\\Program Files\\nodejs\\\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "bson"
+165 error cwd U:\Nawar's Repos\University\University\ReSTfulWebServiceProject
+166 error node -v v0.8.12
+167 error npm -v 1.1.63
+168 error code ELIFECYCLE
+169 verbose exit [ 1, true ]

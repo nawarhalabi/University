@@ -6,13 +6,13 @@
 var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
-  , album = require('./routes/album')
+  , collection = require('./routes/collection')
   , image = require('./routes/image')
   , imageComment = require('./routes/imagecomment')
-  , albumComment = require('./routes/albumcomment')
-  , albumMetadata = require('./routes/albummetadata')
+  , collectionComment = require('./routes/collectioncomment')
+  , collectionMetadata = require('./routes/collectionmetadata')
   , imageMetadata = require('./routes/imagemetadata')
-  , album = require('./routes/album')
+  , collection = require('./routes/collection')
   , http = require('http')
   , path = require('path')
   , mongoose = require('mongoose')
@@ -61,12 +61,11 @@ var tag_imageModel = conn.model('tag_image', tag_image);
 var images = new mongoose.Schema({
 	id: { type: String, required:true, index:{unique: true}},
 	name: {type: String, requiered: true},
-	album: { type: Schema.Types.ObjectId, required: true, ref: 'album' },
+	author: { type: String, required: true, ref: 'author' },
+	collection: { type: Schema.Types.ObjectId, required: true, ref: 'collection' },
 	metadata: {
-		author: { type: String, required: true, ref: 'author' },
 		description: String,
 		date_added: { type: Date, default: Date.now },
-		format: String},
 	comments: [{
 		id: { type: String, required:true, index:{unique: true}},
 		date: { type: Date, default: Date.now },
@@ -74,13 +73,16 @@ var images = new mongoose.Schema({
 		author: { type: String, required: true, ref: 'author' }
 }]
 });
-images.index({name:1,album:1},{unique:true});
+images.index({name:1,collection:1},{unique:true});
 imageModel = conn.model('image', images);
 
-var albums = new mongoose.Schema({
-name: {type: String, requiered: true},
-author: { type: String, required: true, ref: 'author'},
+var collections = new mongoose.Schema({.
+
+	id: { type: String, required:true, index:{unique: true}},
+	name: {type: String, requiered: true},
+	author: { type: String, required: true, ref: 'author'},
 metadata: {
+
 	description: String,
 	date_added: { type: Date, default: Date.now }},
 comments: [{
@@ -90,17 +92,17 @@ comments: [{
 	author: { type: String, required: true, ref: 'author' }
 }]
 });
-albums.index({name:1,author:1},{unique:true});
-var albumModel = conn.model('album', albums);
+collections.index({name:1,author:1},{unique:true});
+var collectionModel = conn.model('collection', collections);
 
 
 function adderr(err){console.log('Add Error:' + err)};
-var newAlbum = new albumModel();
-newAlbum.name = 'WangAlbum';
-newAlbum.author = 'Wang';
-newAlbum.metadata.description = 'crazykevin777@gmail.com';
-newAlbum.comments = null;
-newAlbum.save(adderr);
+var newcollection = new collectionModel();
+newcollection.name = 'Wangcollection';
+newcollection.author = 'Wang';
+newcollection.metadata.description = 'crazykevin777@gmail.com';
+newcollection.comments = null;
+newcollection.save(adderr);
 /*
 //Add--------------------------------------------------
 function adderr(err){console.log('Add Error:' + err)};
@@ -137,54 +139,55 @@ console.log(person.name + ' ' + person.email);
 /*------------------------------------------------------------------------------------------*/
 /*Routes------------------------------------------------------------------------------------*/
 /*------------------------------------------------------------------------------------------*/
+/*Get---------------------------------------------------------------------------------------*/
 app.get('/', routes.index);
-app.get('/albums', album.getAll);
-app.get('/albums/:albumid', album.get);
-app.get('/albums/:albumid/metadata', albumMetadata.get);
-app.get('/albums/:albumid/comments', albumComment.getAll);
-app.get('/albums/:albumid/comments/:commentsid', albumComment.get);
-app.get('/albums/:albumid/images', image.getAll);
-app.get('/albums/:albumid/images/:imageid', image.get);
-app.get('/albums/:albumid/images/:imageid/metadata', imageMetadata.get);
-app.get('/albums/:albumid/images/:imageid/comments', imageComment.getAll);
-app.get('/albums/:albumid/images/:imageid/comments/:commentid', imageComment.get);
+app.get('/collections', collection.getAll);
+app.get('/collections/:collectionid', collection.get);
+app.get('/collections/:collectionid/metadata', collectionMetadata.get);
+app.get('/collections/:collectionid/collectioncomments', collectionComment.getAll);
+app.get('/collections/:collectionid/collectioncomments/:collectioncommentsid', collectionComment.get);
+app.get('/collections/:collectionid/images', image.getAll);
+app.get('/collections/:collectionid/images/:imageid', image.get);
+app.get('/collections/:collectionid/images/:imageid/metadata', imageMetadata.get);
+app.get('/collections/:collectionid/images/:imageid/imagecomments', imageComment.getAll);
+app.get('/collections/:collectionid/images/:imageid/imagecomments/:imagecommentid', imageComment.get);
 
 /*Delete---------------------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------------------------*/
-app.delete('/albums',album.deleteAll);//Don't do this
-app.delete('/albums/:albumid', album.delete);
-app.delete('/albums/:albumid/metadata', albumMetadata.delete);
-app.delete('/albums/:albumid/comments', albumComment.deleteAll);
-app.delete('/albums/:albumid/comments/:commentsid', albumComment.delete);
-app.delete('/albums/:albumid/images', image.deleteAll);
-app.delete('/albums/:albumid/images/:imageid', image.delete);
-app.delete('/albums/:albumid/images/:imageid/metadata',imageMetadata.delete);
-app.delete('/albums/:albumid/images/:imageid/comments',imageComment.deleteAll);
-app.delete('/albums/:albumid/images/:imageid/comments/:commentid', imageComment.delete);
+app.delete('/collections',collection.deleteAll);//Not Authorized
+app.delete('/collections/:collectionid', collection.delete);
+app.delete('/collections/:collectionid/metadata', collectionMetadata.delete);
+app.delete('/collections/:collectionid/collectioncomments', collectionComment.deleteAll);
+app.delete('/collections/:collectionid/collectioncomments/:collectioncommentsid', collectionComment.delete);
+app.delete('/collections/:collectionid/images', image.deleteAll);
+app.delete('/collections/:collectionid/images/:imageid', image.delete);
+app.delete('/collections/:collectionid/images/:imageid/metadata',imageMetadata.delete);
+app.delete('/collections/:collectionid/images/:imageid/imagecomments',imageComment.deleteAll);
+app.delete('/collections/:collectionid/images/:imageid/imagecomments/:imagecommentid', imageComment.delete);
 /*post--------------------------------------------------------------------------------------*/
 /*------------------------------------------------------------------------------------------*/
-app.post('/albums', album.add);
-app.post('/albums/:albumid', album.update);
-app.post('/albums/:albumid/metadata', albumMetadata.update);
-app.post('/albums/:albumid/comments', albumComment.add);
-app.post('/albums/:albumid/comments/:commentsid', albumComment.update);
-app.post('/albums/:albumid/images', image.add);
-app.post('/albums/:albumid/images/:imageid', image.update);
-app.post('/albums/:albumid/images/:imageid/metadata',imageMetadata.update);
-app.post('/albums/:albumid/images/:imageid/comments',imageComment.add);
-app.post('/albums/:albumid/images/:imageid/comments/:commentid', imageComment.update);
+app.post('/collections', collection.add);
+app.post('/collections/:collectionid', collection.update);
+app.post('/collections/:collectionid/metadata', collectionMetadata.update);
+app.post('/collections/:collectionid/collectioncomments', collectionComment.add);
+app.post('/collections/:collectionid/collectioncomments/:collectioncommentsid', collectionComment.update);
+app.post('/collections/:collectionid/images', image.add);
+app.post('/collections/:collectionid/images/:imageid', image.update);
+app.post('/collections/:collectionid/images/:imageid/metadata',imageMetadata.update);
+app.post('/collections/:collectionid/images/:imageid/imagecomments',imageComment.add);
+app.post('/collections/:collectionid/images/:imageid/imagecomments/:imagecommentid', imageComment.update);
 /*Put---------------------------------------------------------------------------------------*/
 /*------------------------------------------------------------------------------------------*/
-app.put('/albums', album.create);//Don't do it, Nawar will.
-app.put('/albums/:albumid', album.add);
-app.put('/albums/:albumid/metadata', albumMetadata.create);
-app.put('/albums/:albumid/comments', albumComment.create);
-app.put('/albums/:albumid/comments/:commentsid', albumComment.add);
-app.put('/albums/:albumid/images', image.create);
-app.put('/albums/:albumid/images/:imageid', image.add);
-app.put('/albums/:albumid/images/:imageid/metadata',imageMetadata.create);
-app.put('/albums/:albumid/images/:imageid/comments',imageComment.create);
-app.put('/albums/:albumid/images/:imageid/comments/:commentid', imageComment.add);
+app.put('/collections', collection.create);//Not Authorized
+app.put('/collections/:collectionid', collection.add);//Not Authorizd
+app.put('/collections/:collectionid/metadata', collectionMetadata.create);
+app.put('/collections/:collectionid/collectioncomments', collectionComment.create);//Not Authorized
+app.put('/collections/:collectionid/collectioncomments/:collectioncommentsid', collectionComment.add);//Not Authorized
+app.put('/collections/:collectionid/images', image.create);//Not Authorized
+app.put('/collections/:collectionid/images/:imageid', image.add);//Not Authorized
+app.put('/collections/:collectionid/images/:imageid/metadata',imageMetadata.create);
+app.put('/collections/:collectionid/images/:imageid/imagecomments',imageComment.create);//Not Authorized
+app.put('/collections/:collectionid/images/:imageid/imagecomments/:imagecommentid', imageComment.add);//NA
 
 /*------------------------------------------------------------------------------------------*/
 /*Server------------------------------------------------------------------------------------*/
