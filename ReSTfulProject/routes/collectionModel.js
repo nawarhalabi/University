@@ -24,6 +24,7 @@ var collections = new mongoose.Schema({
 				description: String,
 				date_added: { type: Date, default: Date.now }},
 			comments: [{
+				id: {type: String, required: true/*, index: {unique: true}*/},
 				date: { type: Date, default: Date.now },
 				text: String,
 				author: { type: String, required: true, ref: 'author' }
