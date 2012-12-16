@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-exports.imageModel = function(){
+/*exports.imageModel = function(){
 	var conn = mongoose.createConnection('mongodb://localhost/Gallerydb');
 	//in case of error
 	conn.on('error', console.error.bind(console, 'connection error: Image Schema Couldnt be created'));
@@ -16,7 +16,7 @@ exports.imageModel = function(){
 			description: String,
 			date_added: { type: Date, default: Date.now }},
 		comments: [{
-			id: { type: String, required:true/*, index:{unique: true}*/},
+			id: { type: String, required:true/*, index:{unique: true}*//*},
 			date: { type: Date, default: Date.now },
 			text: String,
 			author: { type: String, required: true, ref: 'author' }
@@ -27,4 +27,27 @@ exports.imageModel = function(){
 		
 		return imageModel;
 	});
+}*/
+
+exports.createSchema = function()
+{
+	var Schema = mongoose.Schema;
+	var images = new mongoose.Schema({
+	id: { type: String, required:true, index:{unique: true}},
+	name: {type: String, requiered: true},
+	uri: {type: String, required: true},
+	author: { type: String, required: true},
+	collectionId: { type: Schema.Types.ObjectId, required: true, ref: 'collection' },
+	metadata: {
+		description: String,
+		date_added: { type: Date, default: Date.now }},
+	comments: [{
+		id: { type: String, required:true/*, index:{unique: true}*/},
+		date: { type: Date, default: Date.now },
+		text: String,
+		author: { type: String, required: true}
+	}]
+	});
+	images.index({name:1,collection:1},{unique:true});
+	return images;
 }

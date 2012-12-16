@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
-exports.collectionModel = function()
+
+/*exports.collectionModel = function()
 {
 	var conn = mongoose.createConnection('mongodb://localhost/Gallerydb');
 	//in case of error
@@ -12,14 +13,14 @@ exports.collectionModel = function()
 		model = conn.model('collection', collections);
 	});
 	return {model: model, connection:conn};
-}
+}*/
 
 exports.createSchema = function()
 {
 var collections = new mongoose.Schema({
 			id: {type: String, required: true, index:{unique:true}},
 			name: {type: String, required: true},
-			author: { type: String, required: true, ref: 'author'},
+			author: { type: String, required: true},
 			metadata: {
 				description: String,
 				date_added: { type: Date, default: Date.now }},
@@ -27,7 +28,7 @@ var collections = new mongoose.Schema({
 				id: {type: String, required: true/*, index: {unique: true}*/},
 				date: { type: Date, default: Date.now },
 				text: String,
-				author: { type: String, required: true, ref: 'author' }
+				author: { type: String, required: true}
 		}]
 		});
 		collections.index({name:1,author:1},{unique:true});
