@@ -1,0 +1,1 @@
+curl.exe -X DELETE http://localhost:3000/collections/collection3_taha/images/image6_collection3_taha

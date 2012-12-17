@@ -77,7 +77,7 @@ exports.getAll = function(req,res){//GET
 	//Connection Successful
 	conn.once('open', function callback () {
 		var imageModel = conn.model('image', schema);
-		var collectionId = null;
+		
 		//Get the collection _id-----------------------
 		var tempSchema = collectionModel.createSchema();
 		var tempModel = conn.model('collection', tempSchema);
@@ -87,49 +87,49 @@ exports.getAll = function(req,res){//GET
 			if(err)
 			{
 				status.status(500, res, [], '');
-				return 0;
 			}
 			else
 			{
 				if(collection !== null)
-					collectionId = collection._id;
+				{
+					var collectionId = collection._id;
+					console.log(collectionId);
+					var query1 = imageModel.find({'collectionId': collectionId});
+					query1.exec(function(err, images) {
+						if(err)
+						{
+							status.status(404, res, [], '');
+						}
+						else
+						{
+							if(images == null)
+							{
+								status.status(404, res, [], '');
+							}
+							else
+							{
+								var result = '';
+								var i = images.length;
+								images.forEach(function(image){
+									result += '{"id" : "' + image.id + '" , "uri": ' + req.url + '/' + image.id + '"}';
+								
+									i=i-1;
+									if(i!==0)
+										result += ',';
+								});
+								status.status(200, res, [], result);
+							}
+						}
+					});
+				}
 				else
 				{
 					status.status(404, res, [], '');
-					return 0;
 				}
 			}
 		});
 		//--------------------------------------------
 		
-		var query = imageModel.find({'collection': collectionId});
-		
-		query.exec(function(err, images) {
-			if(err)
-			{
-				status.status(404, res, [], '');
-			}
-			else
-			{
-				if(images == null)
-				{
-					status.status(404, res, [], '');
-				}
-				else
-				{
-					var result = '';
-					var i = images.length;
-					images.forEach(function(image){
-					result += '{"id" : "' + image.id + '" , "uri": ' + req.url + '/' + image.id + '"}';
-				
-					i=i-1;
-					if(i!==0)
-						result += ',';
-					});
-					status.status(200, res, [], result);
-				}
-			}
-		});
 	});
 }
 
@@ -144,7 +144,6 @@ exports.get = function(req,res){//GET
 	//Connection Successful
 	conn.once('open', function callback () {
 		var imageModel = conn.model('image', schema);
-		var collectionId = null;
 		//Get the collection _id-----------------------
 		var tempSchema = collectionModel.createSchema();
 		var tempModel = conn.model('collection', tempSchema);
@@ -154,41 +153,43 @@ exports.get = function(req,res){//GET
 			if(err)
 			{
 				status.status(500, res, [], '');
-				return 0;
 			}
 			else
 			{
 				if(collection !== null)
-					collectionId = collection._id;
+				{
+					var collectionId = collection._id;
+					
+					var query = imageModel.findOne({'id': req.params.imageid, 'collectionId': collectionId});
+		
+					query.exec(function(err, image) {
+						if(err)
+						{
+							status.status(404, res, [], '');
+						}
+						else
+						{
+							if(image == null)
+							{
+								status.status(404, res, [], '');
+							}
+							else
+							{
+								result = '{"id" : "' + image.id + '", "name": "'+ image.name +'", "author": "'+ image.author 
+								+'","ImageBinary_uri": "' + image.uri + '", "metadata": "'+req.url+'/'+'metadata'+'", "comments": "'+req.url+'/'+'comments'+'"}';
+								status.status(200, res, [], result);
+							}
+						}
+					});
+				}
 				else
 				{
 					status.status(404, res, [], '');
-					return 0;
 				}
 			}
 		});
 		//--------------------------------------------
-		var query = imageModel.findOne({'id': req.params.imageid, 'collection': collectionId});
 		
-		query.exec(function(err, image) {
-			if(err)
-			{
-				status.status(404, res, [], '');
-			}
-			else
-			{
-				if(image == null)
-				{
-					status.status(404, res, [], '');
-				}
-				else
-				{
-					result = '{"id" : "' + image.id + '", "name": "'+ image.name +'", "author": "'+ image.author 
-					+'","ImageBinary_uri": "' + image.uri + '", "metadata": "'+req.url+'/'+'metadata'+'", "comments": "'+req.url+'/'+'comments'+'"}';
-					status.status(200, res, [], result);
-				}
-			}
-		});
 	});
 }
 
@@ -203,7 +204,6 @@ exports.deleteAll = function(req,res){
 	});
 	conn.once('open', function callback () {
 		var imageModel = conn.model('image', images);
-		var collectionId = null;
 		//Get the collection _id-----------------------
 		var tempSchema = collectionModel.createSchema();
 		var tempModel = conn.model('collection', tempSchema);
@@ -213,32 +213,33 @@ exports.deleteAll = function(req,res){
 			if(err)
 			{
 				status.status(500, res, [], '');
-				return 0;
 			}
 			else
 			{
 				if(collection !== null)
-					collectionId = collection._id;
+				{
+					var collectionId = collection._id;
+							
+					var query=imageModel.find({'collectionId': collectionId});
+					query.exec(function(err, images){
+						if(err){
+							status.status(500,res,[],'');
+						}else{
+							images.forEach(function (image){ 
+								image.remove(); 
+							});
+							status.status(200, res,[], '');
+						}
+					});
+				}
 				else
 				{
 					status.status(404, res, [], '');
-					return 0;
 				}
 			}
 		});
 		//--------------------------------------------
-		
-		var query=imageModel.find({'collection': collectionId});
-		query.exec(function(err, images){
-			if(err){
-				status.status(500,res,[],'');
-			}else{
-				images.forEach(function (image){ 
-					image.remove(); 
-				});
-				status.status(200, res,[], '');
-			}
-		});
+
 	});
 }
 
@@ -251,7 +252,6 @@ exports.delete = function(req, res){
 	});
 	conn.once('open', function callback () {
 		var imageModel = conn.model('image', images);
-		var collectionId = null;
 		//Get the collection _id-----------------------
 		var tempSchema = collectionModel.createSchema();
 		var tempModel = conn.model('collection', tempSchema);
@@ -260,40 +260,41 @@ exports.delete = function(req, res){
 		query.exec(function(err, collection){
 			if(err)
 			{
-				status.status(500, res, [], '');
-				return 0;
+				status.status(500, res, [], '');	
 			}
 			else
 			{
 				if(collection !== null)
-					collectionId = collection._id;
-				else
 				{
+					var collectionId = collection._id;
+					var query = imageModel.findOne({'id': req.params.imageid, 'collectionId':collectionId});
+					query.exec(function (err, image) {
+						if (err) 
+						{		
+							status.status(500,res,[],'');
+						}
+						else 
+						{
+							if(image !== null)
+							{
+								image.remove();
+								status.status(200, res,[], '');
+							}
+							else
+							{	console.log('error2');
+								status.status(404,res,[],'');
+							}
+						}
+					});		
+				}
+				else
+				{	console.log('error1');
 					status.status(404, res, [], '');
-					return 0;
 				}
 			}
 		});
 		//--------------------------------------------
-		var query = imageModel.findOne({'id': req.params.imageid, 'collection':collectionId});
-		query.exec(function (err, image) {
-			if (err) 
-			{		
-				status.status(500,res,[],'');
-			}
-			else 
-			{
-				if(image !== null)
-				{
-					image.remove();
-					status.status(200, res,[], '');
-				}
-				else
-				{
-					status.status(404,res,[],'');
-				}
-			}
-		});	
+
 	});
 }
 
@@ -309,7 +310,6 @@ exports.update = function(req,res){//POST
 	//Connection Successful
 	conn.once('open', function callback () {
 		var imageModel = conn.model('image', images);
-		var collectionId = null;
 		//Get the collection _id-----------------------
 		var tempSchema = collectionModel.createSchema();
 		var tempModel = conn.model('collection', tempSchema);
@@ -319,49 +319,103 @@ exports.update = function(req,res){//POST
 			if(err)
 			{
 				status.status(500, res, [], '');
-				return 0;
 			}
 			else
 			{
 				if(collection !== null)
-					collectionId = collection._id;
+				{
+					var collectionId = collection._id;
+					
+					var query = imageModel.findOne({'id': req.params.imageid, 'collectionId': collectionId});
+					query.exec(function(err, image){
+						if(err)
+						{
+							status.status(500,res,[],'');
+						}
+						else
+						{
+							if(image == null){
+								status.status(404, res, [], '');
+							}else{
+								image.name = req.body.name;
+								image.author = req.body.author;
+								image.uri = req.body.uri;
+								image.save(function(err){
+									if(err)
+									{
+										status.status(409 ,res, [], err.err);
+									}
+									else
+										status.status(200, res, [], '');
+								});
+							}
+						}
+					});//Remove err after the debug phase is over
+				}
 				else
 				{
 					status.status(404, res, [], '');
-					return 0;
 				}
 			}
 		});
 		//--------------------------------------------
-		var query = imageModel.findOne({'id': req.params.imageid, 'collection': collectionId});
-		query.exec(function(err, image){
-			if(err)
-			{
-				status.status(500,res,[],'');
-			}
-			else
-			{
-				if(image == null){
-					status.status(404, res, [], '');
-				}else{
-					image.name = req.body.name;
-					image.author = req.body.author;
-					image.uri = req.body.uri;
-					image.save(function(err){
-						if(err)
-						{
-							status.status(409 ,res, [], err.err);
-						}
-						else
-							status.status(201, res, [{key: 'location', value: req.url + '/' + image.id}], '');
-					});
-				}
-			}
-		});//Remove err after the debug phase is over
+
 	});
 }
 
 // Not Allowed, provide error
 exports.create = function(req,res){
 	status.status(405,res,[],'');
+}
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+exports.responselessDeleteAll = function(req, res){
+	var conn = mongoose.createConnection('mongodb://localhost/Gallerydb');
+	var images = model.createSchema();
+	conn.on('error',function(err){
+		return 500;
+	});
+	result = 200;
+	conn.once('open', function callback () {
+		var imageModel = conn.model('image', images);
+		//Get the collection _id-----------------------
+		var tempSchema = collectionModel.createSchema();
+		var tempModel = conn.model('collection', tempSchema);
+		
+		var query = tempModel.findOne({'id':req.params.collectionid});
+		
+		query.exec(function(err, collection){
+			if(err)
+			{
+				result = 500;
+			}
+			else
+			{
+				if(collection !== null)
+				{
+					var collectionId = collection._id;
+							
+					var query=imageModel.find({'collectionId': collectionId});
+					query.exec(function(err, images){
+						if(err){
+							result = 500;
+						}else{
+							images.forEach(function (image){ 
+								image.remove(); 
+							});
+							result = 200;
+						}
+					});
+					
+				}
+				else
+				{
+					result = 404;
+				}
+			}
+		});
+		console.log(result);
+		//--------------------------------------------
+	});
+	return result;
 }

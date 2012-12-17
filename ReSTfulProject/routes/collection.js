@@ -1,6 +1,7 @@
 var model = require('./collectionModel');
 var status = require('../public/javascripts/status');
 var mongoose = require('mongoose');
+var ImageModel = require('./imageModel');
 
 exports.add = function(req,res){//POST
 	
@@ -131,9 +132,17 @@ exports.deleteAll = function(req,res){
 			if(err){
 				status.status(500,res,[],'');
 			}else{
-				collections.forEach(function (collection){ 
-					collection.remove(); 
-				});
+				for (var i=0;i<collections.length;i++)
+				{ 
+					req.params.collectionid = collection[i].id;
+					var result = ImageRoute.responselessDeleteAll(req, res);
+					if(result !== 200)
+					{
+						status.status(result, res, [], '');
+					}
+					else
+						collection[i].remove(); 
+				}
 				status.status(200, res,[], '');
 			}
 		
@@ -144,12 +153,16 @@ exports.deleteAll = function(req,res){
 exports.delete = function(req, res){
 	var conn = mongoose.createConnection('mongodb://localhost/Gallerydb');
 	var collections = model.createSchema();
-
+	var images = ImageModel.createSchema();
+	
 	conn.on('error',function(err){
 		status.status(500, res,[], '');
 	});
+	
 	conn.once('open', function callback () {
 		var collectionModel = conn.model('collection', collections);
+		var imageModel = conn.model('image', images);
+		
 		var query = collectionModel.findOne({'id': req.params.collectionid});
 		query.exec(function (err, collection) {
 			if (err) 
@@ -160,8 +173,37 @@ exports.delete = function(req, res){
 			{
 				if(collection !== null)
 				{
-					collection.remove();
-					status.status(200, res,[], '');
+					query.exec(function(err, collection){
+						if(err)
+						{
+							status.status(500, res, [], '');
+						}
+						else
+						{
+							if(collection !== null)
+							{
+								var collectionId = collection._id;
+										
+								var query = imageModel.find({'collectionId': collectionId});
+								query.exec(function(err, images){
+									if(err){
+										status.status(500, res, [], '');
+									}else{
+										images.forEach(function (image){ 
+											image.remove(); 
+										});
+										
+										collection.remove();
+										status.status(200, res, [], '');
+									}
+								});
+							}
+							else
+							{
+								status.status(404, res, [], '');
+							}
+						}
+					});
 				}
 				else
 				{
