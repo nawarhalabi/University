@@ -8,7 +8,7 @@ var conn = mongoose.createConnection('mongodb://localhost/Gallerydb');
 	//Connection Error
 	conn.on('error', function(err)
 		{
-			status.status(500, res, [], '');
+			status.status(500, res, {}, '');
 		});
 	//Connection Successful
 	conn.once('open', function callback () {
@@ -18,18 +18,18 @@ var conn = mongoose.createConnection('mongodb://localhost/Gallerydb');
 		query.exec(function(err, collection) {
 			if(err)
 			{
-				status.status(404, res, [], '');
+				status.status(404, res, {}, '');
 			}
 			else
 			{
-				if(collection == null || collection.metadata.description == undefined)
+				if(collection == null || collection.metadata.description == undefined)//give the undefine into null  && the [] should change into {}
 				{
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 				}
 				else
 				{
 					result = '{"Description" : "' + collection.metadata.description + '", "Date Added": "'+ collection.metadata.date_added +'"}';
-					status.status(200, res, [], result);
+					status.status(200, res, {}, result);
 				}
 			}
 		});
@@ -41,7 +41,7 @@ exports.delete = function(req,res){//DELETE
 	var collections = model.createSchema();
 
 	conn.on('error',function(err){
-		status.status(500, res,[], '');
+		status.status(500, res, {}, '');
 	});
 	conn.once('open', function callback () {
 		var collectionModel = conn.model('collection', collections);
@@ -49,7 +49,7 @@ exports.delete = function(req,res){//DELETE
 		query.exec(function (err, collection) {
 			if (err) 
 			{		
-				status.status(500,res,[],'');
+				status.status(500,res, {},'');
 			}
 			else 
 			{
@@ -60,15 +60,15 @@ exports.delete = function(req,res){//DELETE
 					collection.save(function(err){
 						if(err)
 						{
-							status.status(409 ,res, [], '');
+							status.status(409 ,res, {}, '');
 						}
 						else
-							status.status(200, res, [], '');
+							status.status(200, res, {}, '');
 					});
 				}
 				else
 				{
-					status.status(404,res,[],'');
+					status.status(404,res, {},'');
 				}
 			}
 		});	
@@ -81,7 +81,7 @@ exports.update = function(req,res){//POST
 	//Connection Error
 	conn.on('error', function(err)
 		{
-			status.status(500, res, [], '');
+			status.status(500, res, {}, '');
 		});
 	//Connection Successful
 	conn.once('open', function callback () {
@@ -90,15 +90,15 @@ exports.update = function(req,res){//POST
 		query.exec(function(err, collection){
 			if(err)
 			{
-				status.status(500,res,[],'');
+				status.status(500,res, {},'');
 			}
 			else
 			{
 				if(collection == null){
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 				}else{
 					if(req.body.description == null){
-								status.status(400, res, [], '');
+								status.status(400, res, {}, '');
 					}else{
 						if(collection.metadata.description !== undefined){
 							var d = new Date();
@@ -107,13 +107,13 @@ exports.update = function(req,res){//POST
 							collection.metadata.save(function(err){
 								if(err)
 								{
-									status.status(409 ,res, [], '');
+									status.status(409 ,res, {}, '');
 								}
 								else
-									status.status(200, res, [{key: 'location', value: req.url}], '');
+									status.status(200, res, {}, '');
 							});
 						}else
-									status.status(404 ,res, [], '');							
+									status.status(404 ,res, {}, '');							
 					}
 				}
 			}
@@ -127,7 +127,7 @@ exports.create = function(req,res){//PUT
 	//Connection Error
 	conn.on('error', function(err)
 		{
-			status.status(500, res, [], '');
+			status.status(500, res, {}, '');
 		});
 	//Connection Successful
 	conn.once('open', function callback () {
@@ -136,15 +136,15 @@ exports.create = function(req,res){//PUT
 		query.exec(function(err, collection){
 			if(err)
 			{
-				status.status(500,res,[],'');
+				status.status(500,res, {},'');
 			}
 			else
 			{
 				if(collection == null){
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 				}else{
 					if(req.body.description == null){
-							status.status(400, res, [], '');
+							status.status(400, res, {}, '');
 					}else{
 						var d = new Date();
 						collection.metadata.description = req.body.description;
@@ -153,10 +153,10 @@ exports.create = function(req,res){//PUT
 							if(err)
 							{
 								console.log(err);
-								status.status(409 ,res, [], '');
+								status.status(409 ,res, {}, '');
 							}
 							else
-								status.status(201, res, [{key: 'location', value: req.url}], '');
+								status.status(201, res, {'location': req.url}, '');
 						});
 					}
 				}

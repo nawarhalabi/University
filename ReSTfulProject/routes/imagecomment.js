@@ -11,7 +11,7 @@ exports.getAll = function(req,res){
 	//Connection Error
 	conn.on('error', function(err)
 		{
-			status.status(500, res, [], '');
+			status.status(500, res, {}, '');
 		});
 	//Connection Successful
 	conn.once('open', function callback () {
@@ -21,13 +21,13 @@ exports.getAll = function(req,res){
 			query.exec(function(err, collection) {
 			if(err)
 			{	
-				status.status(404, res, [], '');
+				status.status(404, res, {}, '');
 			}
 			else
 			{
 				if(collection == null)
 				{
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 				}
 				else
 				{
@@ -37,19 +37,19 @@ exports.getAll = function(req,res){
 					query.exec(function(err, image) {
 						if(err)
 						{
-							status.status(404, res, [], '');
+							status.status(404, res, {}, '');
 						}
 						else
 						{
 							if(image == null)
 							{	
-								status.status(404, res, [], '');
+								status.status(404, res, {}, '');
 							}
 							else
 							{	
 								if(image.comments[0]==null)
 								{	
-									status.status(404, res, [], '');
+									status.status(404, res, {}, '');
 								}
 									else
 									{
@@ -62,7 +62,7 @@ exports.getAll = function(req,res){
 										if(i!==0)
 											result += ',';
 										});
-										status.status(200, res, [], result);
+										status.status(200, res, {}, result);
 									}
 							}
 						}
@@ -82,7 +82,7 @@ exports.get = function(req,res){
 	//Connection Error
 	conn.on('error', function(err)
 		{
-			status.status(500, res, [], '');
+			status.status(500, res, {}, '');
 		});
 	//Connection Successful
 	conn.once('open', function callback () {
@@ -91,13 +91,13 @@ exports.get = function(req,res){
 			query.exec(function(err, collection) {
 			if(err)
 			{
-				status.status(404, res, [], '');
+				status.status(404, res, {}, '');
 			}
 			else
 			{
 				if(collection == null)
 				{
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 				}
 				else
 				{
@@ -108,25 +108,25 @@ exports.get = function(req,res){
 					query.exec(function(err, image) {
 						if(err)
 						{
-							status.status(404, res, [], '');
+							status.status(404, res, {}, '');
 						}
 						else
 						{
 							if(image == null)
 							{
-								status.status(404, res, [], '');
+								status.status(404, res, {}, '');
 							}
 							else
 							{	
 									if(image.comments==null)
 								{
-									status.status(404, res, [], '');
+									status.status(404, res, {}, '');
 								}
 									else
 									{
 										result = '{"id" : "' + image.comments[0].id + '", "author": "'+ image.comments[0].author 
 										+'", "text" : "' + image.comments[0].text + '","Date" : "' + image.comments[0].date + '"}';
-										status.status(200, res, [], result);
+										status.status(200, res, {}, result);
 									}
 							}
 						}
@@ -146,7 +146,7 @@ exports.deleteAll = function(req,res){
 	//Connection Error
 	conn.on('error', function(err)
 		{
-			status.status(500, res, [], '');
+			status.status(500, res, {}, '');
 		});
 	//Connection Successful
 	conn.once('open', function callback () {
@@ -155,13 +155,13 @@ exports.deleteAll = function(req,res){
 			query.exec(function(err, collection) {
 			if(err)
 			{	
-				status.status(404, res, [], '');
+				status.status(404, res, {}, '');
 			}
 			else
 			{	
 				if(collection == null)
 				{	
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 				}
 				else
 				{
@@ -171,19 +171,19 @@ exports.deleteAll = function(req,res){
 					var query = Imodel.findOne({'id':req.params.imageid}).exec(function(err, image) {
 						if(err)
 						{	
-							status.status(404, res, [], '');
+							status.status(404, res, {}, '');
 						}
 						else
 						{
 							if(image == null)
 							{	
-								status.status(404, res, [], '');
+								status.status(404, res, {}, '');
 							}
 							else
 							{	
 								image.comments = new Array();
 								image.save();
-								status.status(200, res,[], '');
+								status.status(200, res, {}, '');
 							}	
 						}		
 					});
@@ -201,7 +201,7 @@ exports.delete = function(req,res){
 	//Connection Error
 	conn.on('error', function(err)
 		{
-			status.status(500, res, [], '');
+			status.status(500, res, {}, '');
 		});
 	//Connection Successful
 	conn.once('open', function callback () {
@@ -210,13 +210,13 @@ exports.delete = function(req,res){
 			query.exec(function(err, collection) {
 			if(err)
 			{
-				status.status(404, res, [], '');
+				status.status(404, res, {}, '');
 			}
 			else
 			{
 				if(collection == null)
 				{
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 				}
 				else
 				{
@@ -227,25 +227,25 @@ exports.delete = function(req,res){
 					query.exec(function(err, image) {
 						if(err)
 						{
-							status.status(404, res, [], '');
+							status.status(404, res, {}, '');
 						}
 						else
 						{
 							if(image == null)
 							{
-								status.status(404, res, [], '');
+								status.status(404, res, {}, '');
 							}
 							else
 							{	
 									if(image.comments[0]==null)
 								{
-									status.status(404, res, [], '');
+									status.status(404, res, {}, '');
 								}
 									else
 									{	
 										image.comments[0].remove(req.params.imagecommentid);
 										image.save();
-										status.status(200,res,[],'');
+										status.status(200,res, {},'');
 									}
 							}
 						}
@@ -264,7 +264,7 @@ exports.add = function(req,res){
 	//Connection Error
 	conn.on('error', function(err)
 		{
-			status.status(500, res, [], '');
+			status.status(500, res, {}, '');
 		});
 	//Connection Successful
 	conn.once('open', function callback () {
@@ -274,13 +274,13 @@ exports.add = function(req,res){
 			query.exec(function(err, collection) {
 			if(err)
 			{	
-				status.status(404, res, [], '');
+				status.status(404, res, {}, '');
 			}
 			else
 			{
 				if(collection == null)
 				{	
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 				}
 				else
 				{
@@ -290,19 +290,19 @@ exports.add = function(req,res){
 					query.exec(function(err, image) {
 						if(err)
 						{
-							status.status(404, res, [], '');
+							status.status(404, res, {}, '');
 						}
 						else
 						{
 							if(image == null)
 							{
-								status.status(404, res, [], '');
+								status.status(404, res, {}, '');
 							}
 							else
 							{	
 								if(req.body.text==null || req.body.author == null)
 								{
-									status.status(400, res, [], '');
+									status.status(400, res, {}, '');
 								}
 								else
 								{	var newId = new mongoose.Types.ObjectId();
@@ -311,10 +311,10 @@ exports.add = function(req,res){
 									image.save(function(err){
 										if(err)
 										{
-											status.status(409 ,res, [], '');//We should never get here!!
+											status.status(409 ,res, {}, '');//We should never get here!!
 										}
 										else
-											status.status(201, res, [{key: 'location', value: req.url + '/' + newId}], '');
+											status.status(201, res, {'location': req.url + '/' + newId}, '');
 									});//Remove err after the debug phase is over
 								}						
 							}
@@ -334,7 +334,7 @@ exports.update = function(req,res){
 	//Connection Error
 	conn.on('error', function(err)
 		{
-			status.status(500, res, [], '');
+			status.status(500, res, {}, '');
 		});
 	//Connection Successful
 	conn.once('open', function callback () {
@@ -343,13 +343,13 @@ exports.update = function(req,res){
 			query.exec(function(err, collection) {
 			if(err)
 			{
-				status.status(404, res, [], '');
+				status.status(404, res, {}, '');
 			}
 			else
 			{
 				if(collection == null)
 				{
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 				}
 				else
 				{
@@ -365,19 +365,19 @@ exports.update = function(req,res){
 						query.exec(function(err, image) {
 							if(err)
 							{
-								status.status(500, res, [], '');
+								status.status(500, res, {}, '');
 							}
 							else
 							{
 								if(image == null)
 								{
-									status.status(404, res, [], '');
+									status.status(404, res, {}, '');
 								}
 								else
 								{	
 										if(image.comments==null)
 									{
-										status.status(404, res, [], '');
+										status.status(404, res, {}, '');
 									}
 										else
 										{	var d = new Date();
@@ -387,11 +387,11 @@ exports.update = function(req,res){
 											image.save(function(err){
 												if(err)
 												{	
-													status.status(409 ,res, [], '');
+													status.status(409 ,res, {}, '');
 												}
 												else
 												{
-													status.status(200, res, [], '');
+													status.status(200, res, {}, '');
 												}
 											});
 										}

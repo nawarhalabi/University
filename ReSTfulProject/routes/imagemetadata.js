@@ -3,14 +3,13 @@ var ImageModel = require('./imageModel');
 var status = require('../public/javascripts/status');
 var mongoose = require('mongoose');
 
-
 exports.get = function(req,res){
 var conn = mongoose.createConnection('mongodb://localhost/Gallerydb');
 	var CollectionSchema = CollectionModel.createSchema();
 	//Connection Error
 	conn.on('error', function(err)
 		{
-			status.status(500, res, [], '');
+			status.status(500, res, {}, '');
 		});
 	//Connection Successful
 	conn.once('open', function callback () {
@@ -19,42 +18,41 @@ var conn = mongoose.createConnection('mongodb://localhost/Gallerydb');
 			query.exec(function(err, collection) {
 			if(err)
 			{	console.log(err);
-				status.status(404, res, [], '');
+				status.status(404, res, {}, '');
 			}
 			else
 			{
 				if(collection == null)
 				{	console.log('444');
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 					
 				}
 				else
 				{
-					
 					var ImageSchema = ImageModel.createSchema();
 					var Imodel = conn.model('image', ImageSchema);
 					query = Imodel.findOne({'id': req.params.imageid});
 					query.exec(function(err, image) {
 						if(err)
 						{	console.log('333');
-							status.status(404, res, [], '');
+							status.status(404, res, {}, '');
 						}
 						else
 						{
 							if(image == null)
 							{console.log('222');
-								status.status(404, res, [], '');
+								status.status(404, res, {}, '');
 							}
 							else
 							{	
 									if(image.metadata.date_added ==null)
 								{	console.log('111');
-									status.status(404, res, [], '');
+									status.status(404, res, {}, '');
 								}
 									else
 									{
 										result = '{"descrption" : "' + image.metadata.description + '" , "Date" : "' + image.metadata.date_added + '"}';
-										status.status(200, res, [], result);
+										status.status(200, res, {}, result);
 									}
 							}
 						}
@@ -72,7 +70,7 @@ exports.delete = function(req,res){
 	//Connection Error
 	conn.on('error', function(err)
 		{
-			status.status(500, res, [], '');
+			status.status(500, res, {}, '');
 		});
 	//Connection Successful
 	conn.once('open', function callback () {
@@ -81,13 +79,13 @@ exports.delete = function(req,res){
 			query.exec(function(err, collection) {
 			if(err)
 			{
-				status.status(404, res, [], '');
+				status.status(404, res, {}, '');
 			}
 			else
 			{
 				if(collection == null)
 				{
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 				}
 				else
 				{
@@ -98,25 +96,25 @@ exports.delete = function(req,res){
 					query.exec(function(err, image) {
 						if(err)
 						{
-							status.status(404, res, [], '');
+							status.status(404, res, {}, '');
 						}
 						else
 						{
 							if(image == null)
 							{
-								status.status(404, res, [], '');
+								status.status(404, res, {}, '');
 							}
 							else
 							{	
 									if(image.metadata.date_added==null)
 								{
-									status.status(404, res, [], '');
+									status.status(404, res, {}, '');
 								}
 									else
 									{	
 										image.metadata[0].remove();
 										image.save();
-										status.status(200, res,[], '');
+										status.status(200, res, {}, '');
 									}
 							}
 						}
@@ -133,7 +131,7 @@ exports.update = function(req,res){
 	//Connection Error
 	conn.on('error', function(err)
 		{ 
-			status.status(500, res, [], '');
+			status.status(500, res, {}, '');
 		});
 	//Connection Successful
 	conn.once('open', function callback () {
@@ -143,13 +141,13 @@ exports.update = function(req,res){
 			query.exec(function(err, collection) {
 			if(err)
 			{	
-				status.status(404, res, [], '');
+				status.status(404, res, {}, '');
 			}
 			else
 			{
 				if(collection == null)
 				{	
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 				}
 				else
 				{
@@ -159,19 +157,19 @@ exports.update = function(req,res){
 					query.exec(function(err, image) {
 						if(err)
 						{	
-							status.status(404, res, [], '');
+							status.status(404, res, {}, '');
 						}
 						else
 						{
 							if(image == null || image.metadata.date_added == null)
 							{	
-								status.status(404, res, [], '');
+								status.status(404, res, {}, '');
 							}
 							else
 							{	
 								if(req.body.description==null)
 								{
-									status.status(400, res, [], '');
+									status.status(400, res, {}, '');
 								}
 								else
 								{	
@@ -182,10 +180,10 @@ exports.update = function(req,res){
 									image.save(function(err){
 										if(err)
 										{	console.log(image.metadata.description);
-											status.status(409 ,res, [], '');
+											status.status(409 ,res, {}, '');
 										}
 										else
-											status.status(200, res, [], '');
+											status.status(200, res, {}, '');
 									});//Remove err after the debug phase is over
 								}						
 							}
@@ -197,14 +195,12 @@ exports.update = function(req,res){
 	});
 }
 
-
-
 exports.create = function(req,res){
 var conn = mongoose.createConnection('mongodb://localhost/Gallerydb');
 	//Connection Error
 	conn.on('error', function(err)
 		{ 
-			status.status(500, res, [], '');
+			status.status(500, res, {}, '');
 		});
 	//Connection Successful
 	conn.once('open', function callback () {
@@ -214,13 +210,13 @@ var conn = mongoose.createConnection('mongodb://localhost/Gallerydb');
 			query.exec(function(err, collection) {
 			if(err)
 			{	
-				status.status(404, res, [], '');
+				status.status(404, res, {}, '');
 			}
 			else
 			{
 				if(collection == null)
 				{	
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 				}
 				else
 				{
@@ -230,19 +226,19 @@ var conn = mongoose.createConnection('mongodb://localhost/Gallerydb');
 					query.exec(function(err, image) {
 						if(err)
 						{	
-							status.status(404, res, [], '');
+							status.status(404, res, {}, '');
 						}
 						else
 						{
 							if(image == null)
 							{	
-								status.status(404, res, [], '');
+								status.status(404, res, {}, '');
 							}
 							else
 							{	
 								if(req.body.description==null)
 								{
-									status.status(400, res, [], '');
+									status.status(400, res, {}, '');
 								}
 								else
 								{	
@@ -253,10 +249,10 @@ var conn = mongoose.createConnection('mongodb://localhost/Gallerydb');
 									image.save(function(err){
 										if(err)
 										{	
-											status.status(409 ,res, [], '');
+											status.status(409 ,res, {}, '');
 										}
 										else
-											status.status(201, res, [{key: 'location', value: req.url + '/' +'metadata'}], '');
+											status.status(201, res, {'location': req.url + '/' +'metadata'}, '');
 									});//Remove err after the debug phase is over
 								}						
 							}

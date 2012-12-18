@@ -8,7 +8,7 @@ exports.getAll = function(req,res){
 	//Connection Error
 	conn.on('error', function(err)
 		{
-			status.status(500, res, [], '');
+			status.status(500, res, {}, '');
 		});
 	//Connection Successful
 		conn.once('open', function callback () {
@@ -18,13 +18,13 @@ exports.getAll = function(req,res){
 		query.exec(function(err, collection) {
 			if(err)
 			{
-				status.status(404, res, [], '');
+				status.status(404, res, {}, '');
 			}
 			else
 			{
 				if(collection == null)
 				{
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 				}
 				else
 				{
@@ -36,7 +36,7 @@ exports.getAll = function(req,res){
 							result += ',';
 							});
 					//});
-					status.status(200, res, [], result);
+					status.status(200, res, {}, result);
 				}
 			}
 		});
@@ -49,7 +49,7 @@ exports.get = function(req,res){
 	//Connection Error
 	conn.on('error', function(err)
 		{
-			status.status(500, res, [], '');
+			status.status(500, res, {}, '');
 		});
 	//Connection Successful
 	conn.once('open', function callback () {
@@ -58,13 +58,13 @@ exports.get = function(req,res){
 		query.exec(function(err, collection){
 			if(err)
 			{
-				status.status(500,res,[],'');
+				status.status(500,res, {},'');
 			}
 			else
 			{
 				if(collection == null){
 				//	console.log('Here 1');
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 				}else{
 					var j = 0;
 					var k = -1;
@@ -78,11 +78,11 @@ exports.get = function(req,res){
 					});
 					if(k == -1){
 					//	console.log('Here 2  '  +req.params.collectioncommentsid);
-						status.status(404, res, [], '');
+						status.status(404, res, {}, '');
 					}else{
 						result = '{"id" : "'+ comment.id +'" , "author": "' + comment.author +
 								'", date: "'+ comment.date +'", "text": "'+ comment.text +'"}';
-						status.status(200, res, [], result);
+						status.status(200, res, {}, result);
 					}
 				}
 			}
@@ -96,7 +96,7 @@ exports.deleteAll = function(req,res){
 	//Connection Error
 	conn.on('error', function(err)
 		{
-			status.status(500, res, [], '');
+			status.status(500, res, {}, '');
 		});
 	//Connection Successful
 	conn.once('open', function callback () {
@@ -105,23 +105,23 @@ exports.deleteAll = function(req,res){
 		query.exec(function(err, collection){
 			if(err)
 			{
-				status.status(500,res,[],'');
+				status.status(500,res, {},'');
 			}
 			else
 			{
 				if(collection == null){
 				//	console.log('Here 1');
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 				}else{
 						var i = collection.comments.length;
 						collection.comments.splice(0,i);
 						collection.save(function(err){
 						if(err)
 						{
-							status.status(409 ,res, [], '');
+							status.status(409 ,res, {}, '');
 						}
 						else
-							status.status(200, res, [{key: 'location', value: req.url}], '');
+							status.status(200, res, {}, '');
 						});
 				}
 			}
@@ -135,7 +135,7 @@ exports.delete = function(req,res){
 	//Connection Error
 	conn.on('error', function(err)
 		{
-			status.status(500, res, [], '');
+			status.status(500, res, {}, '');
 		});
 	//Connection Successful
 	conn.once('open', function callback () {
@@ -144,13 +144,13 @@ exports.delete = function(req,res){
 		query.exec(function(err, collection){
 			if(err)
 			{
-				status.status(500,res,[],'');
+				status.status(500,res, {},'');
 			}
 			else
 			{
 				if(collection == null){
 				//	console.log('Here 1');
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 				}else{
 					var j = 0;
 					var k = -1;
@@ -163,16 +163,16 @@ exports.delete = function(req,res){
 					});
 					if(k == -1){
 					//	console.log('Here 2  '  +req.params.collectioncommentsid);
-						status.status(404, res, [], '');
+						status.status(404, res, {}, '');
 					}else{
 						collection.comments.splice(k,1);
 						collection.save(function(err){
 						if(err)
 						{
-							status.status(409 ,res, [], '');
+							status.status(409 ,res, {}, '');
 						}
 						else
-							status.status(200, res, [{key: 'location', value: req.url}], '');
+							status.status(200, res, {}, '');
 						});
 					}
 				}
@@ -187,7 +187,7 @@ exports.update = function(req,res){
 	//Connection Error
 	conn.on('error', function(err)
 		{
-			status.status(500, res, [], '');
+			status.status(500, res, {}, '');
 		});
 	//Connection Successful
 	conn.once('open', function callback () {
@@ -196,13 +196,13 @@ exports.update = function(req,res){
 		query.exec(function(err, collection){
 			if(err)
 			{
-				status.status(500,res,[],'');
+				status.status(500,res, {},'');
 			}
 			else
 			{
 				if(collection == null){
 				//	console.log('Here 1');
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 				}else{
 					var j = 0;
 					var k = -1;
@@ -215,11 +215,11 @@ exports.update = function(req,res){
 					});
 					if(k == -1){
 					//	console.log('Here 2  '  +req.params.collectioncommentsid);
-						status.status(404, res, [], '');
+						status.status(404, res, {}, '');
 					}else{
 						if(req.body.author == null || req.body.text == null)
 						{
-							status.status(400, res, [], '');
+							status.status(400, res, {}, '');
 						}
 						else{
 							var d = new Date();
@@ -233,10 +233,10 @@ exports.update = function(req,res){
 							collection.save(function(err){
 								if(err)
 								{
-									status.status(409 ,res, [], '');
+									status.status(409 ,res, {}, '');
 								}
 								else
-									status.status(200, res, [{key: 'location', value: req.url}], '');
+									status.status(200, res, {}, '');
 							});
 						}
 					}
@@ -252,7 +252,7 @@ exports.add = function(req,res){
 	//Connection Error
 	conn.on('error', function(err)
 		{
-			status.status(500, res, [], '');
+			status.status(500, res, {}, '');
 		});
 	//Connection Successful
 	conn.once('open', function callback () {
@@ -261,16 +261,16 @@ exports.add = function(req,res){
 		query.exec(function(err, collection){
 			if(err)
 			{
-				status.status(500,res,[],'');
+				status.status(500,res, {},'');
 			}
 			else
 			{
 				if(collection == null){
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 				}else{
 					if(req.body.author == null || req.body.text == null)
 						{
-							status.status(400, res, [], '');
+							status.status(400, res, {}, '');
 						}
 					else{
 						var newId = new mongoose.Types.ObjectId();
@@ -279,10 +279,10 @@ exports.add = function(req,res){
 						collection.save(function(err){
 							if(err)
 							{
-								status.status(409 ,res, [], '');
+								status.status(409 ,res, {}, '');
 							}
 							else
-								status.status(201, res, [{key: 'location', value: req.url}], '');
+								status.status(201, res, {'location': req.url + '/' + newId}, '');
 						});
 					}
 				}
@@ -293,5 +293,5 @@ exports.add = function(req,res){
 
 //Not Allowed, Provide error
 exports.create = function(req,res){
-	status.status(405,res,[],'');
+	status.status(405,res, {},'');
 }

@@ -10,7 +10,7 @@ exports.add = function(req,res){//POST
 	//Connection Error
 	conn.on('error', function(err)
 		{
-			status.status(500, res, [], '');
+			status.status(500, res, {}, '');
 		});
 	//Connection Successful
 	conn.once('open', function callback () {
@@ -22,7 +22,7 @@ exports.add = function(req,res){//POST
 		
 		if(req.body.name==null || req.body.author == null || req.body.uri == null)
 		{
-			status.status(400, res, [], '');
+			status.status(400, res, {}, '');
 		}
 		else
 		{
@@ -37,7 +37,7 @@ exports.add = function(req,res){//POST
 			query.exec(function(err, collection){
 				if(err)
 				{
-					status.status(500, res, [], '');
+					status.status(500, res, {}, '');
 				}
 				else
 				{
@@ -48,16 +48,16 @@ exports.add = function(req,res){//POST
 						if(err)
 						{
 							console.log(newImage.collectionId);
-							status.status(409 ,res, [], '');
+							status.status(409 ,res, {}, '');
 						}
 						else
-						status.status(201, res, [{key: 'location', value: req.url + '/' + newImage.id}], '');
+							status.status(201, res, {'location' : req.url + '/' + newImage.id}, '');
 						});//Remove err after the debug phase is over
 						
 					}
 					else
 					{
-						status.status(404, res, [], '');
+						status.status(404, res, {}, '');
 					}
 				}
 			});
@@ -72,7 +72,7 @@ exports.getAll = function(req,res){//GET
 	//Connection Error
 	conn.on('error', function(err)
 		{
-			status.status(500, res, [], '');
+			status.status(500, res, {}, '');
 		});
 	//Connection Successful
 	conn.once('open', function callback () {
@@ -86,7 +86,7 @@ exports.getAll = function(req,res){//GET
 		query.exec(function(err, collection){
 			if(err)
 			{
-				status.status(500, res, [], '');
+				status.status(500, res, {}, '');
 			}
 			else
 			{
@@ -98,13 +98,13 @@ exports.getAll = function(req,res){//GET
 					query1.exec(function(err, images) {
 						if(err)
 						{
-							status.status(404, res, [], '');
+							status.status(404, res, {}, '');
 						}
 						else
 						{
 							if(images == null)
 							{
-								status.status(404, res, [], '');
+								status.status(404, res, {}, '');
 							}
 							else
 							{
@@ -117,14 +117,14 @@ exports.getAll = function(req,res){//GET
 									if(i!==0)
 										result += ',';
 								});
-								status.status(200, res, [], result);
+								status.status(200, res, {}, result);
 							}
 						}
 					});
 				}
 				else
 				{
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 				}
 			}
 		});
@@ -139,7 +139,7 @@ exports.get = function(req,res){//GET
 	//Connection Error
 	conn.on('error', function(err)
 		{
-			status.status(500, res, [], '');
+			status.status(500, res, {}, '');
 		});
 	//Connection Successful
 	conn.once('open', function callback () {
@@ -152,7 +152,7 @@ exports.get = function(req,res){//GET
 		query.exec(function(err, collection){
 			if(err)
 			{
-				status.status(500, res, [], '');
+				status.status(500, res, {}, '');
 			}
 			else
 			{
@@ -165,26 +165,26 @@ exports.get = function(req,res){//GET
 					query.exec(function(err, image) {
 						if(err)
 						{
-							status.status(404, res, [], '');
+							status.status(404, res, {}, '');
 						}
 						else
 						{
 							if(image == null)
 							{
-								status.status(404, res, [], '');
+								status.status(404, res, {}, '');
 							}
 							else
 							{
 								result = '{"id" : "' + image.id + '", "name": "'+ image.name +'", "author": "'+ image.author 
-								+'","ImageBinary_uri": "' + image.uri + '", "metadata": "'+req.url+'/'+'metadata'+'", "comments": "'+req.url+'/'+'comments'+'"}';
-								status.status(200, res, [], result);
+								+'","ImageBinary_uri": "' + image.uri + '", "metadata": "'+req.url+'/'+'metadata'+'", "comments": "'+req.url+'/'+'comments'+'", "CID": "'+image.collectionId+'"}';
+								status.status(200, res, {}, result);
 							}
 						}
 					});
 				}
 				else
 				{
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 				}
 			}
 		});
@@ -200,7 +200,7 @@ exports.deleteAll = function(req,res){
 
 	conn.on('error',function(err){
 		console.log(err);
-		status.status(500, res,[], '');
+		status.status(500, res, {}, '');
 	});
 	conn.once('open', function callback () {
 		var imageModel = conn.model('image', images);
@@ -212,7 +212,7 @@ exports.deleteAll = function(req,res){
 		query.exec(function(err, collection){
 			if(err)
 			{
-				status.status(500, res, [], '');
+				status.status(500, res, {}, '');
 			}
 			else
 			{
@@ -223,18 +223,18 @@ exports.deleteAll = function(req,res){
 					var query=imageModel.find({'collectionId': collectionId});
 					query.exec(function(err, images){
 						if(err){
-							status.status(500,res,[],'');
+							status.status(500,res, {},'');
 						}else{
 							images.forEach(function (image){ 
 								image.remove(); 
 							});
-							status.status(200, res,[], '');
+							status.status(200, res, {}, '');
 						}
 					});
 				}
 				else
 				{
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 				}
 			}
 		});
@@ -248,7 +248,7 @@ exports.delete = function(req, res){
 	var images = model.createSchema();
 
 	conn.on('error',function(err){
-		status.status(500, res,[], '');
+		status.status(500, res, {}, '');
 	});
 	conn.once('open', function callback () {
 		var imageModel = conn.model('image', images);
@@ -260,7 +260,7 @@ exports.delete = function(req, res){
 		query.exec(function(err, collection){
 			if(err)
 			{
-				status.status(500, res, [], '');	
+				status.status(500, res, {}, '');	
 			}
 			else
 			{
@@ -271,25 +271,25 @@ exports.delete = function(req, res){
 					query.exec(function (err, image) {
 						if (err) 
 						{		
-							status.status(500,res,[],'');
+							status.status(500,res, {},'');
 						}
 						else 
 						{
 							if(image !== null)
 							{
 								image.remove();
-								status.status(200, res,[], '');
+								status.status(200, res, {}, '');
 							}
 							else
 							{	console.log('error2');
-								status.status(404,res,[],'');
+								status.status(404,res, {},'');
 							}
 						}
 					});		
 				}
 				else
 				{	console.log('error1');
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 				}
 			}
 		});
@@ -305,7 +305,7 @@ exports.update = function(req,res){//POST
 	//Connection Error
 	conn.on('error', function(err)
 		{
-			status.status(500, res, [], '');
+			status.status(500, res, {}, '');
 		});
 	//Connection Successful
 	conn.once('open', function callback () {
@@ -318,7 +318,7 @@ exports.update = function(req,res){//POST
 		query.exec(function(err, collection){
 			if(err)
 			{
-				status.status(500, res, [], '');
+				status.status(500, res, {}, '');
 			}
 			else
 			{
@@ -330,31 +330,39 @@ exports.update = function(req,res){//POST
 					query.exec(function(err, image){
 						if(err)
 						{
-							status.status(500,res,[],'');
+							status.status(500,res, {},'');
 						}
 						else
 						{
 							if(image == null){
-								status.status(404, res, [], '');
+								status.status(404, res, {}, '');
 							}else{
-								image.name = req.body.name;
-								image.author = req.body.author;
-								image.uri = req.body.uri;
-								image.save(function(err){
-									if(err)
-									{
-										status.status(409 ,res, [], err.err);
-									}
-									else
-										status.status(200, res, [], '');
-								});
+								if(req.body.name && req.body.author && req.body.uri)
+								{
+									image.name = req.body.name;
+									image.author = req.body.author;
+									image.uri = req.body.uri;
+									image.collectionId = collectionId;
+									image.save(function(err){
+										if(err)
+										{
+											status.status(409 ,res, {}, '');
+										}
+										else
+										{
+											status.status(200, res, {}, '');
+										}
+									});
+								}
+								else
+									status.status(400, res, {}, '');
 							}
 						}
 					});//Remove err after the debug phase is over
 				}
 				else
 				{
-					status.status(404, res, [], '');
+					status.status(404, res, {}, '');
 				}
 			}
 		});
@@ -365,7 +373,7 @@ exports.update = function(req,res){//POST
 
 // Not Allowed, provide error
 exports.create = function(req,res){
-	status.status(405,res,[],'');
+	status.status(405,res, {},'');
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -406,7 +414,6 @@ exports.responselessDeleteAll = function(req, res){
 							result = 200;
 						}
 					});
-					
 				}
 				else
 				{
