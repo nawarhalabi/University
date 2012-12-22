@@ -22,14 +22,24 @@ exports.add = function(req,res){//POST
 		
 		if(req.body.name==null || req.body.author == null || req.body.uri == null)
 		{
+			console.log(req.body);
 			status.status(400, res, {}, '');
 		}
 		else
-		{
+		{	
 			newImage.name = req.body.name;
 			newImage.author = req.body.author;
 			newImage.uri = req.body.uri;
-			newImage.id = req.body.name + '_' + req.params.collectionid;
+			if(req.params.tempId)
+				newImage.id = req.params.tempId;
+			else
+			{
+				if(req.params.imageid)
+					newImage.id = req.params.imageid;
+				else
+					newImage.id = req.body.name;
+				req.params.tempId = newImage.id;
+			}
 			newImage.connectionId = null;
 			//Get the collection _id-----------------------
 			
@@ -43,17 +53,56 @@ exports.add = function(req,res){//POST
 				{
 					if(collection !== null)
 					{
-						newImage.collectionId = collection._id;
-						newImage.save(function(err){
-						if(err)
-						{
-							console.log(newImage.collectionId);
-							status.status(409 ,res, {}, '');
-						}
-						else
-							status.status(201, res, {'location' : req.url + '/' + newImage.id}, '');
-						});//Remove err after the debug phase is over
-						
+						var imageQuery = imageModel.findOne({'id': newImage.id});
+						imageQuery.exec(function(err, image){
+							if(err)
+							{
+								status.status(500, res, {}, '');
+							}
+							else
+							{
+								if(image)
+								{
+									if(req.method == 'PUT')
+									{
+										image.name = req.body.name;
+										image.uri = req.body.uri;
+										image.author = req.body.author;
+										image.save(function(err){
+											if(err)
+											{
+												status.status(500, res, {}, '');
+											}
+											else
+											{
+												status.status(200, res, {}, '');
+											}
+										});
+									}
+									if(req.method == 'POST')
+									{
+										req.params.tempId += '1';
+										add(req, res);
+									}
+								}
+								else
+								{
+									newImage.collectionId = collection._id;
+									newImage.save(function(err){
+									if(err)
+									{
+										console.log(err);
+										status.status(409 ,res, {}, '');//Check Later
+									}
+									else
+										if(req.method == 'POST')
+											status.status(201, res, {'location' : req.url + '/' + newImage.id}, '');
+										if(req.method == 'PUT')
+											status.status(200, res, {}, '');
+									});//Remove err after the debug phase is over
+								}
+							}
+						});
 					}
 					else
 					{
@@ -108,15 +157,16 @@ exports.getAll = function(req,res){//GET
 							}
 							else
 							{
-								var result = '';
+								var result = '[';
 								var i = images.length;
 								images.forEach(function(image){
-									result += '{"id" : "' + image.id + '" , "uri": ' + req.url + '/' + image.id + '"}';
+									result += '{"id" : "' + image.id + '" , "uri": "' + req.url + '/' + image.id + '"}';
 								
 									i=i-1;
 									if(i!==0)
 										result += ',';
 								});
+								result += ']';
 								status.status(200, res, {}, result);
 							}
 						}
@@ -176,7 +226,7 @@ exports.get = function(req,res){//GET
 							else
 							{
 								result = '{"id" : "' + image.id + '", "name": "'+ image.name +'", "author": "'+ image.author 
-								+'","ImageBinary_uri": "' + image.uri + '", "metadata": "'+req.url+'/'+'metadata'+'", "comments": "'+req.url+'/'+'comments'+'", "CID": "'+image.collectionId+'"}';
+								+'","ImageBinary_uri": "' + image.uri + '", "metadata": "'+req.url+'/'+'metadata'+'", "comments": "'+req.url+'/'+'comments'+'", "Collection_Name": "'+ collection.name+'"}';
 								status.status(200, res, {}, result);
 							}
 						}
@@ -298,7 +348,6 @@ exports.delete = function(req, res){
 	});
 }
 
-
 exports.update = function(req,res){//POST
 	var conn = mongoose.createConnection('mongodb://localhost/Gallerydb');
 	var images = model.createSchema();
@@ -373,7 +422,7 @@ exports.update = function(req,res){//POST
 
 // Not Allowed, provide error
 exports.create = function(req,res){
-	status.status(405,res, {},'');
+	status.status(405,res, {'Allow':'GET, HEAD, POST, DELETE'},'');
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -425,4 +474,10 @@ exports.responselessDeleteAll = function(req, res){
 		//--------------------------------------------
 	});
 	return result;
+}
+
+
+function add(req, res)
+{
+	exports.add(req, res);
 }

@@ -14,9 +14,9 @@ var express = require('express')
   , collectionComment = require('./routes/collectioncomment')
   , image = require('./routes/image')
   , imageMetadata = require('./routes/imagemetadata')
-  , imageComment = require('./routes/imagecomment');
-
-var app = express();
+  , imageComment = require('./routes/imagecomment')
+  , status = require('./public/javascripts/status');
+var app = express()
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -26,6 +26,25 @@ app.configure(function(){
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
+  app.use(function (req, res, next){
+		if(req.url[req.url.length-1] == '/')
+			req.url = req.url.substring(0, req.url.length-1);
+		
+		console.log(req.headers);
+		var funnyChars = false;
+		console.log(req.body);
+		var keys = Object.keys(req.body);
+		console.log(keys);
+		Object.keys(req.body).forEach(function(key){
+			var detect=/^[a-zA-Z0-9\._-]*$/.test(req.body[key]);
+			if(!detect)
+				funnyChars = true;
+		});
+		if(funnyChars == false)
+			next();
+		else
+			status.status(400, res, {}, 'Non-allowed characters found in JSON data');
+	});
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
 });
@@ -38,6 +57,7 @@ app.configure('development', function(){
 /*------------------------------------------------------------------------------------------*/
 /*Get---------------------------------------------------------------------------------------*/
 app.get('/', routes.index);
+
 app.get('/collections', collection.getAll);
 app.get('/collections/:collectionid', collection.get);
 app.get('/collections/:collectionid/metadata', collectionMetadata.get);

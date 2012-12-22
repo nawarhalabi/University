@@ -1,1 +1,1 @@
-curl.exe -X DELETE http://localhost:3000/collections/collection3_taha
+curl.exe -i -X DELETE http://localhost:3000/collections/collection3_taha

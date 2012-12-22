@@ -1,0 +1,1 @@
+curl.exe -i -X GET http://localhost:3000/collections/collection1_nawar/images/image1/imagecomments/

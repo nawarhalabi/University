@@ -252,7 +252,7 @@ var conn = mongoose.createConnection('mongodb://localhost/Gallerydb');
 											status.status(409 ,res, {}, '');
 										}
 										else
-											status.status(201, res, {'location': req.url + '/' +'metadata'}, '');
+											status.status(200, res, {}, '');
 									});//Remove err after the debug phase is over
 								}						
 							}

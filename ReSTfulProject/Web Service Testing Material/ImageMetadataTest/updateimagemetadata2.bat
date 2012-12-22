@@ -1,0 +1,1 @@
+curl.exe -i -X POST -H "content-type:application/json" -d @imetadata2.json http://localhost:3000/collections/collection2_wang/images/image3/metadata

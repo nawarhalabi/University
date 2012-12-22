@@ -156,7 +156,7 @@ exports.create = function(req,res){//PUT
 								status.status(409 ,res, {}, '');
 							}
 							else
-								status.status(201, res, {'location': req.url}, '');
+								status.status(200, res, {}, '');
 						});
 					}
 				}

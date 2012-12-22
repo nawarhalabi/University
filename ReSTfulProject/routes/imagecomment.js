@@ -406,6 +406,7 @@ exports.update = function(req,res){
 }
 
 
-// Not Allowed, Provide Error
-//exports.create = function(req,res){
-//}
+//Not Allowed, Provide Error
+exports.create = function(req,res){
+	status.status(405, res, {'Allow':'GET, HEAD, POST, DELETE'}, '');
+}

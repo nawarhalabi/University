@@ -1,0 +1,1 @@
+curl.exe -i -X PUT -H "content-type:application/json" -d "imetadata1.json" http://localhost:3000/collections/collection1_nawar/images/image1/metadata

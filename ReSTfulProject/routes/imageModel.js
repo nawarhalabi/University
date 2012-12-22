@@ -48,6 +48,6 @@ exports.createSchema = function()
 		author: { type: String, required: true}
 	}]
 	});
-	images.index({name:1,collectionId:1},{unique:true});
+	images.index({id:1,collectionId:1},{unique:true});
 	return images;
 }

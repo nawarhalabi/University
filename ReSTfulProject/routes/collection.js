@@ -25,16 +25,61 @@ exports.add = function(req,res){//POST
 		{
 			newCollection.name = req.body.name;
 			newCollection.author = req.body.author;
-			newCollection.id = req.body.name + '_' + req.body.author;
+			if(req.params.tempId)
+				newCollection.id = req.params.tempId;
+			else
+			{
+				if(req.params.collectionid)
+					newCollection.id = req.params.collectionid;
+				else
+					newCollection.id = req.body.name + '_' + req.body.author;
+				req.params.tempId = newCollection.id;
+			}
 			newCollection.comments = [];
-			newCollection.save(function(err){
-				if(err)
+			query = collectionModel.findOne({'id':newCollection.id});
+			query.exec(function(err, collection)
+			{
+				if(collection)
 				{
-					status.status(409 ,res, {}, '');
+					if(req.method == 'PUT')
+					{
+						collection.name = req.body.name;
+						collection.author = req.body.author;
+						collection.save(function(err){
+							if(err)
+							{
+								status.status(500, res, {}, '');
+							}
+							else
+							{
+								status.status(200, res, {}, '');
+							}
+						});
+					}
+					if(req.method == 'POST')
+					{
+						req.params.tempId += '1';
+						add(req, res);
+					}
 				}
 				else
-					status.status(201, res, {'location': req.url + '/' + newCollection.id}, '');
-			});//Remove err after the debug phase is over
+				{
+					newCollection.save(function(err){
+					if(err)
+					{
+						console.log(err);
+						status.status(409 ,res, {}, '');//Check later
+					}
+					else
+					{
+						if(req.method == 'POST')
+							status.status(201, res, {'location': req.url + '/' + newCollection.id}, '');
+						if(req.method == 'PUT')
+							status.status(200, res, {}, '');
+					}
+				});//Remove err after the debug phase is over
+				}
+			});
 		}
 	});
 }
@@ -65,16 +110,17 @@ exports.getAll = function(req,res){//GET
 				}
 				else
 				{
-					var result = '';
+					var result = '[';
 					var i = collections.length;
 					collections.forEach(function(collection){
-					result += '{"id" : "' + collection.id + '" , "uri": ' + req.url + '/' + collection.id + '"}';
+					result += '{"id" : "' + collection.id + '" , "uri": "' + req.url + '/' + collection.id + '"}';
 				
 					i=i-1;
 					if(i!==0)
 						result += ',';
 					});
-					status.status(200, res, {}, result);
+					result += ']';
+					status.status(200, res, {'content-type':'application/json'}, result);
 				}
 			}
 		});
@@ -120,33 +166,41 @@ exports.get = function(req,res){//GET
 exports.deleteAll = function(req,res){
 	var conn = mongoose.createConnection('mongodb://localhost/Gallerydb');
 	var collections = model.createSchema();
-
+	
+	var imageSchema = ImageModel.createSchema();
+	
 	conn.on('error',function(err){
 		console.log(err);
 		status.status(500, res, {}, '');
 	});
 	conn.once('open', function callback () {
 		var collectionModel = conn.model('collection', collections);
+		var imageModel = conn.model('image', imageSchema);
 		var query=collectionModel.find();
+		broken = false;
 		query.exec(function(err, collections){
 			if(err){
 				status.status(500, res, {},'');
 			}else{
-				for (var i=0;i<collections.length;i++)
+				collections.forEach(function(collection)
 				{ 
-					req.params.collectionid = collection[i].id;
-					var result = ImageRoute.responselessDeleteAll(req, res);
-					if(result !== 200)
-					{
-						status.status(result, res, {}, '');
-					}
-					else
-						collection[i].remove(); 
-				}
-				status.status(200, res, {}, '');
+					var query = imageModel.find({'collectionId': collection._id});
+					query.exec(function(err, images){
+						if(err){
+							broken = true;
+						}else{
+							images.forEach(function (image){ 
+								image.remove(); 
+							});
+							collection.remove();
+						}
+					});
+				});
+				if(!broken)
+					status.status(200, res, {}, '');
+				else
+					status.status(500, res, {}, '');
 			}
-		
-	
 	});
 	});
 }
@@ -260,5 +314,10 @@ exports.update = function(req,res){//POST
 
 // Not Allowed, provide error
 exports.create = function(req,res){
-	status.status(405, res, {},'');
+	status.status(405, res, {'Allow':'GET, HEAD, POST, DELETE'},'');
+}
+
+function add(req, res)
+{
+	exports.add(req, res);
 }

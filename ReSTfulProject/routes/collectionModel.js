@@ -31,6 +31,6 @@ var collections = new mongoose.Schema({
 				author: { type: String, required: true}
 		}]
 		});
-		collections.index({name:1,author:1},{unique:true});
+		//collections.index({name:1,author:1},{unique:true});
 		return collections;
 }

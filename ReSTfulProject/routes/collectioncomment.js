@@ -28,14 +28,17 @@ exports.getAll = function(req,res){
 				}
 				else
 				{
-					var result = ''
+					var result = '[';
 					//collections.forEach(function(collection){
 						collection.comments.forEach(function(comment){
-							result += '{"id" : "'+ comment.id +'" , "author": "' + comment.author +
-								'", date: "'+ comment.date +'", "text": "'+ comment.text +'"}';
+							result += '{"id" : "'+ comment.id +'" , "uri": "'+ req.url+'/'+comment.id +'"}';
 							result += ',';
 							});
 					//});
+					result = result.substring(0,result.length-1);
+					result += ']';
+					if(result.length == 1)
+						result = '';
 					status.status(200, res, {}, result);
 				}
 			}
@@ -80,8 +83,8 @@ exports.get = function(req,res){
 					//	console.log('Here 2  '  +req.params.collectioncommentsid);
 						status.status(404, res, {}, '');
 					}else{
-						result = '{"id" : "'+ comment.id +'" , "author": "' + comment.author +
-								'", date: "'+ comment.date +'", "text": "'+ comment.text +'"}';
+						result = '{"id" : "'+ collection.comments[k].id +'" , "author": "' + collection.comments[k].author +
+								'", "date": "'+ collection.comments[k].date +'", "text": "'+ collection.comments[k].text +'"}';
 						status.status(200, res, {}, result);
 					}
 				}
@@ -293,5 +296,5 @@ exports.add = function(req,res){
 
 //Not Allowed, Provide error
 exports.create = function(req,res){
-	status.status(405,res, {},'');
+	status.status(405,res, {'Allow':'GET, HEAD, POST, DELETE'},'');
 }

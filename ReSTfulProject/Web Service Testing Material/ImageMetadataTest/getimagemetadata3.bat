@@ -1,0 +1,1 @@
+curl.exe -i -X GET http://localhost:3000/collections/collection3_taha/images/image5/metadata

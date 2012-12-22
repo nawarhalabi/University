@@ -2,6 +2,7 @@ exports.status = function (code, res, headers, body)
 {
 	//Additional Headers-----------------------------------------------------------
 	headers["Content-Length"] = body.length + '';
+	headers['access-control-allow-origin'] = '*';
 	//-----------------------------------------------------------------------------
 	if(code==200)//OK on get requests
 	{
@@ -13,7 +14,7 @@ exports.status = function (code, res, headers, body)
 	}
 	if(code==400)//Bad Request
 	{
-		res.writeHead(400,' Bad Request', headers/*{'content-length': body.length, 'Date': Date.now}*/);
+		res.writeHead(400, 'Bad Request', headers/*{'content-length': body.length, 'Date': Date.now}*/);
 	}
 	if(code==404)//Resource not found
 	{

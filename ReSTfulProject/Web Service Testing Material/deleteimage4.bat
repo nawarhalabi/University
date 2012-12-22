@@ -1,1 +1,1 @@
-curl.exe -X DELETE http://localhost:3000/collections/collection2_wang/images/image4_collection2_wang
+curl.exe -i -X DELETE http://localhost:3000/collections/collection2_wang/images/image4

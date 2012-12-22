@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <script type="text/javascript" src="JQuery.js"></script>
+    <script type="text/javascript">
+        //<![CDATA[
+		hookEvents = function () {
+            $('#dataSamples a').on('click', function (event) {
+                $('#data').text(event.currentTarget.textContent);
+            });
+            $('#uriSamples a').on('click', function (event) {
+                $('#uri').val(event.currentTarget.textContent);
+            });
+			$('#result a').on('click', function (event) {
+				$('#uri').val(event.currentTarget.textContent.substring(1, event.currentTarget.textContent.length));
+            });
+        };
+		
+        $(hookEvents);
+        sendRequest = function () {
+            var method = $('#method').val();
+            var uri = 'http://localhost:3000/' + $('#uri').val();
+            var data = $('#data').val();
+			if(method == 'GET')
+				data='';
+            var accept = $('#headers').val();
+            var dataType = $('#dataType').val();
+
+            var settings = {
+                url: uri,
+                beforeSend: function (xhrObj) {
+                    if ($('#checkBoxHeaders').is(':checked'))
+                        xhrObj.setRequestHeader("Accept", "application/" + accept);
+                },
+                type: method,
+                processData: false,
+                data: data,
+                complete: function (body, status, xmlObject) {
+					if(body.responseText && body.responseText != '')
+					{
+						body.responseText = body.responseText.split('<').join('');
+						body.responseText = body.responseText.split('>').join('');
+						try
+						{
+						var jsonObject = JSON.parse(body.responseText);
+						if(jsonObject.uri)
+							jsonObject.uri = '<a href=\'javascript:\'>' + jsonObject.uri + '</a>';
+						if(jsonObject.metadata)
+							jsonObject.metadata = '<a href=\'javascript:\'>' + jsonObject.metadata + '</a>';	
+						if(jsonObject.comments)
+							jsonObject.comments = '<a href=\'javascript:\'>' + jsonObject.comments + '</a>';
+						if(jsonObject.forEach)
+							jsonObject.forEach(function(obj){
+								if(obj.uri)
+									obj.uri = '<a href=\'javascript:\'>' + obj.uri + '</a>';
+									if(obj.metadata)
+										obj.metadata = '<a href=\'javascript:\'>' + obj.metadata + '</a>';	
+									if(obj.comments)
+										obj.comments = '<a href=\'javascript:\'>' + obj.comments + '</a>';
+							});
+						body.responseText = JSON.stringify(jsonObject);
+						
+						}
+						catch(err)
+						{
+							alert(err+': BAD JSON IN DATA TEXT AREA');
+						}
+					}
+					
+					$('#result').html('<p>Status Code: ' + body.status + ', Status Text: ' + body.statusText + '<br/>' + body.responseText + '</p>');
+						
+                    var test = body.getAllResponseHeaders().split("\r\n").join('<br/>');
+
+                    $('#responseHeaders').html(test);
+					
+					hookEvents();
+                }
+            };
+            if (method == 'POST' || method == 'PUT')
+                settings.contentType = "application/" + dataType + ";charset=utf-8";
+            $.ajax(settings);
+        }
+
+        function sendRequest() {
+
+            var method = $('#method').val();
+            var uri = 'http://localhost:3000/' + $('#uri').val();
+            var data = $('#data').val
+            var accept = $('#headers').val();
+
+            $.ajax(uri, { type: method, headers: { accept: accept }, data: data, success: onReturn });
+        }
+        //]]>
+    </script>
+    <title></title>
+    <style type="text/css">
+        td {
+            border: thin solid #800000;
+        }
+        .auto-style1 {
+            height: 26px;
+        }
+        .auto-style2 {
+            width: 178px;
+        }
+        .auto-style3 {
+            height: 26px;
+            width: 178px;
+        }
+        #data {
+            width: 460px;
+        }
+        #method {
+            width: 200px;
+            margin-right: 0px;
+        }
+        #headers {
+            width: 200px;
+        }
+        #TextArea1 {
+            width: 200px;
+            height: 42px;
+        }
+        #uri {
+            width: 250px;
+        }
+        .auto-style4 {
+            height: 26px;
+            width: 571px;
+        }
+        #headers0 {
+            width: 200px;
+        }
+        </style>
+</head>
+<body>
+
+    <table style="border: medium solid #800000; width:100%;">
+        <tr>
+            <td class="auto-style2">JSON Data</td>
+            <td colspan="2">
+                <textarea id="data" name="S1" rows="2"></textarea><br />
+                <p id="dataSamples">
+                Examples for json data:<br />
+                1- For Collections: <a  href ="javascript:">{&quot;name&quot;:&quot;collection_name&quot;,&quot;author&quot;:&quot;author_name&quot;}</a><br />
+                2- For Images: <a href ="javascript:">{&quot;name&quot;:&quot;image_name&quot;,&quot;author&quot;:&quot;author_name&quot;,&quot;uri&quot;:&quot;uri_on_the_web&quot;}</a><br />
+                3- For Metadata (images or collections): <a href ="javascript:">{&quot;description&quot;:&quot;desc&quot;}</a><br />
+                4- For Commets (images or collections): <a href ="javascript:">{&quot;text&quot;:&quot;text&quot;,&quot;author&quot;:&quot;author_name&quot;}</a><br />
+        </p>
+        </td>
+        </tr>
+        <tr>
+            <td class="auto-style2">Accept</td>
+            <td colspan="2">
+                <select id="headers" name="headers">
+                    <option value="json">content-type:application/json</option>
+                    <option value="xml">content-type:application/xml</option>
+                </select><input id="checkBoxHeaders" type="checkbox" /></td>
+        </tr>
+        <tr>
+            <td class="auto-style2">Data Type</td>
+            <td colspan="2">
+                <select id="dataType" name="dataType">
+                    <option value="json">content-type:application/json</option>
+                    <option value="xml">content-type:application/xml</option>
+                </select></td>
+        </tr>
+        <tr>
+            <td class="auto-style3">Method</td>
+            <td class="auto-style1" colspan="2">
+                <select id="method" name="method">
+                    <option value="GET">GET</option>
+                    <option value="POST">POST</option>
+                    <option value="PUT">PUT</option>
+                    <option value="DELETE">DELETE</option>
+                </select></td>
+        </tr>
+        <tr>
+            <td class="auto-style3">URI</td>
+            <td class="auto-style4">
+                <p>http://localhost:3000/<input id="uri" type="text" /></p>
+                <p id="uriSamples">Prebuilt Templates:<br />
+                    1- All Collections: <a href ="javascript:">collections</a><br />
+                    2- One Collection: <a href ="javascript:">collections/collectionid</a><br />
+                    3- Images in a Collection: <a href ="javascript:">collections/collectionid/images</a><br />
+                    4- One Image: <a href ="javascript:">collections/collectionid/images/imageid</a><br />
+                    5- Collection Metadata: <a href ="javascript:">collections/collectionid/metadata</a><br />
+                    6- Collection Comments: <a href ="javascript:">collections/collectionid/collectionComments</a><br />
+                    7- One Collection Comment: <a href ="javascript:">collections/collectionid/collectioncomments/collectioncommentid</a><br />
+                    8- Images Metadata: <a href ="javascript:">collections/collectionid/images/imageid/metadata</a><br />
+                    9- Image Comments: <a href ="javascript:">collections/collectionid/images/imageid/imagecomments</a><br />
+                    10- One Image Comment: <a href ="javascript:">collections/collectionid/images/imageid/imagecomments/imagecommentid</a><br />
+                </p>
+            </td>
+                
+        </tr>
+        <tr>
+            <td class="auto-style2">
+                <input id="submit" type="button" value="Send Request" onclick="sendRequest(); return false;"/></td>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+    </table>
+	<div>
+		<p id="responseHeaders"> </p>
+	</div>
+	
+    <div>
+        <p id="result"></p>
+    </div>
+
+</body>
+</html>
