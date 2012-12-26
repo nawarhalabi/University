@@ -242,7 +242,7 @@
                 data = '';
             var accept = $('#headers').val();
             var dataType = $('#dataType').val();
-
+            var imageHTML = '';
             var settings = {
                 url: uri,
                 beforeSend: function (xhrObj) {
@@ -256,6 +256,12 @@
                     if (body.responseText && body.responseText != '') {
                         try {
                             var jsonObject = JSON.parse(body.responseText);
+
+                            if (jsonObject.ImageBinary_uri) {
+                                imageHTML = '<br/><p><img src="' + jsonObject.ImageBinary_uri + '" alt = "image not found"/></p>';
+                                $('#image').html(imageHTML);
+                            }
+
                             if (jsonObject.uri)
                                 jsonObject.uri = '<a href=\'javascript:\'>' + jsonObject.uri + '</a>';
                             if (jsonObject.metadata)
@@ -371,7 +377,7 @@
                 
                 Examples for json data: (Click on one of the choises to copy in to the text entry)<br />
                 1- For Collections: <a  href ="javascript:">{&quot;name&quot;:&quot;collection_name&quot;,&quot;author&quot;:&quot;author_name&quot;}</a><br />
-                2- For Images: <a href ="javascript:">{&quot;name&quot;:&quot;image_name&quot;,&quot;author&quot;:&quot;author_name&quot;,&quot;uri&quot;:&quot;uri_on_the_web&quot;}</a><br />
+                2- For Images: <a href ="javascript:">{&quot;name&quot;:&quot;image_name&quot;,&quot;author&quot;:&quot;author_name&quot;,&quot;uri&quot;:&quot;/node.png&quot;}</a><br />
                 3- For Metadata (images or collections): <a href ="javascript:">{&quot;description&quot;:&quot;desc&quot;}</a><br />
                 4- For Comments (images or collections): <a href ="javascript:">{&quot;text&quot;:&quot;text&quot;,&quot;author&quot;:&quot;author_name&quot;}</a><br />
         
@@ -432,5 +438,6 @@
         <p id="result"></p>
     </div>
 
+    <div id="image"></div>
 </body>
 </html>

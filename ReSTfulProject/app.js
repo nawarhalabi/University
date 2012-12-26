@@ -50,7 +50,7 @@ app.configure(function(){
 		var funnyChars = false;
 		var keys = Object.keys(req.body);
 		Object.keys(req.body).forEach(function(key){
-			var detect=/^[a-zA-Z0-9\._-]*$/.test(req.body[key]);
+			var detect=/^[a-zA-Z0-9\/:._-]*$/.test(req.body[key]);
 			if(!detect)
 				funnyChars = true;
 		});
