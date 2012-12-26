@@ -106,16 +106,23 @@ exports.delete = function(req,res){
 							}
 							else
 							{	
-									if(image.metadata.date_added==null)
+								if(image.metadata.date_added==null)
 								{
 									status.status(404, res, {}, '');
 								}
-									else
-									{	
-										image.metadata[0].remove();
-										image.save();
-										status.status(200, res, {}, '');
-									}
+								else
+								{	
+									image.metadata.description = undefined;
+									image.metadata.date_added = undefined;
+									image.save(function(err){
+										if(err)
+										{
+											status.status(409 ,res, {}, '');
+										}
+										else
+											status.status(200, res, {}, '');
+									});
+								}
 							}
 						}
 					});

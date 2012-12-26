@@ -26,15 +26,29 @@ app.configure(function(){
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
+  app.use(express.static(path.join(__dirname, 'public')));
   app.use(function (req, res, next){
+	
+		//View the request headers---------------
+		console.log(req.headers);
+		//Make sure the content-type and accept headers are complatible with the service
+		if((req.method == 'POST' || req.method == 'PUT') && req.headers['content-type'] != null && req.headers['content-type'].substring(0,16) != 'application/json')
+			status.status(406 ,res, {}, 'Only Accept JSON data');
+		else
+		{
+			if( req.headers['accept'] == null || (req.headers['accept'].split(',').indexOf('application/json') != -1 || req.headers['accept'].split(',').indexOf('*/*') != -1))
+				next();
+			else
+				status.status(415, res, {}, 'Server does not support the media type required')
+		}
+  });
+  app.use(function (req, res, next){
+		//delete last uri character if it's a '/'
 		if(req.url[req.url.length-1] == '/')
 			req.url = req.url.substring(0, req.url.length-1);
-		
-		console.log(req.headers);
+		//Disallow unicode characters------------
 		var funnyChars = false;
-		console.log(req.body);
 		var keys = Object.keys(req.body);
-		console.log(keys);
 		Object.keys(req.body).forEach(function(key){
 			var detect=/^[a-zA-Z0-9\._-]*$/.test(req.body[key]);
 			if(!detect)
@@ -46,7 +60,6 @@ app.configure(function(){
 			status.status(400, res, {}, 'Non-allowed characters found in JSON data');
 	});
   app.use(app.router);
-  app.use(express.static(path.join(__dirname, 'public')));
 });
 
 app.configure('development', function(){
@@ -56,7 +69,6 @@ app.configure('development', function(){
 /*Routes------------------------------------------------------------------------------------*/
 /*------------------------------------------------------------------------------------------*/
 /*Get---------------------------------------------------------------------------------------*/
-app.get('/', routes.index);
 
 app.get('/collections', collection.getAll);
 app.get('/collections/:collectionid', collection.get);

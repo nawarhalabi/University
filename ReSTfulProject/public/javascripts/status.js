@@ -24,6 +24,10 @@ exports.status = function (code, res, headers, body)
 	{
 		res.writeHead(405, 'Not allowed', headers/*{'content-length': body.length, 'Date': Date.now}*/);
 	}
+	if(code==406)//Not Acceptable
+	{
+		res.writeHead(406, 'Not Acceptable', headers);
+	}
 	if(code==409)//Conflict on posts or puts
 	{
 		res.writeHead(409, 'Conflict', headers/*{'content-length': body.length, 'Date': Date.now}*/);
@@ -31,6 +35,10 @@ exports.status = function (code, res, headers, body)
 	if(code==412)//Precondition failed like date added is more recent than the date in the precondition
 	{
 		res.writeHead(412, 'Precondition Failed', headers/*{'content-length': body.length, 'Date': Date.now}*/);
+	}
+	if(code==415)//Unsupported Media Type
+	{
+		res.writeHead(415, 'Unsupported Media Type', headers);
 	}
 	if(code==500)//Server error e.g. database off
 	{

@@ -53,7 +53,7 @@ exports.getAll = function(req,res){
 								}
 									else
 									{
-										var result = '';
+										var result = '[';
 										var i = image.comments.length;
 										image.comments.forEach(function(comment){
 										result += '{"id" : "' + comment.id + '", "author": "'+ comment.author +'", "text" : "' + comment.text + '","Date" : "' + comment.date + '"}';
@@ -62,6 +62,7 @@ exports.getAll = function(req,res){
 										if(i!==0)
 											result += ',';
 										});
+										result += ']';
 										status.status(200, res, {}, result);
 									}
 							}
@@ -223,7 +224,7 @@ exports.delete = function(req,res){
 					
 					var ImageSchema = ImageModel.createSchema();
 					var Imodel = conn.model('image', ImageSchema);
-					var query = Imodel.findOne({'id': req.params.imageid ,'comments.id': req.params.imagecommentid });
+					var query = Imodel.findOne({'id': req.params.imageid /*,'comments.id': req.params.imagecommentid*/ });
 					query.exec(function(err, image) {
 						if(err)
 						{
@@ -237,16 +238,36 @@ exports.delete = function(req,res){
 							}
 							else
 							{	
-									if(image.comments[0]==null)
+								if(image.comments==null)
 								{
 									status.status(404, res, {}, '');
 								}
-									else
-									{	
-										image.comments[0].remove(req.params.imagecommentid);
-										image.save();
-										status.status(200,res, {},'');
+								else
+								{	
+									var j = 0;
+									var k = -1;
+									image.comments.forEach(function(comment){
+										if(comment.id == req.params.imagecommentid){
+											k = j;
+										}else{
+											j++;
+										}
+									});
+									if(k == -1){
+									//	console.log('Here 2  '  +req.params.collectioncommentsid);
+										status.status(404, res, {}, '');
+									}else{
+										image.comments.splice(k,1);
+										image.save(function(err){
+											if(err)
+											{
+												status.status(409 ,res, {}, '');
+											}
+											else
+												status.status(200, res, {}, '');
+										});
 									}
+								}
 							}
 						}
 					});
