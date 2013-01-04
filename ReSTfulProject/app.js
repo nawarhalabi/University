@@ -111,12 +111,12 @@ app.put('/collections', collection.create);//Not Authorized
 app.put('/collections/:collectionid', collection.add);//Not Authorizd
 app.put('/collections/:collectionid/metadata', collectionMetadata.create);
 app.put('/collections/:collectionid/collectioncomments', collectionComment.create);//Not Authorized
-app.put('/collections/:collectionid/collectioncomments/:collectioncommentsid', collectionComment.add);//Not Authorized
+app.put('/collections/:collectionid/collectioncomments/:collectioncommentsid', collectionComment.create);//Not Authorized
 app.put('/collections/:collectionid/images', image.create);//Not Authorized
 app.put('/collections/:collectionid/images/:imageid', image.add);//Not Authorized
 app.put('/collections/:collectionid/images/:imageid/metadata',imageMetadata.create);
 app.put('/collections/:collectionid/images/:imageid/imagecomments',imageComment.create);//Not Authorized
-app.put('/collections/:collectionid/images/:imageid/imagecomments/:imagecommentid', imageComment.add);//NA
+app.put('/collections/:collectionid/images/:imageid/imagecomments/:imagecommentid', imageComment.create);//NA
 
 /*------------------------------------------------------------------------------------------*/
 /*Server------------------------------------------------------------------------------------*/

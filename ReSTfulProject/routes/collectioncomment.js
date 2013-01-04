@@ -39,7 +39,10 @@ exports.getAll = function(req,res){
 					result += ']';
 					if(result.length == 1)
 						result = '';
-					status.status(200, res, {}, result);
+					if(result == '')
+						status.status(404, res, {}, '');
+					else
+						status.status(200, res, {}, result);
 				}
 			}
 		});
@@ -117,7 +120,7 @@ exports.deleteAll = function(req,res){
 					status.status(404, res, {}, '');
 				}else{
 						var i = collection.comments.length;
-						collection.comments.splice(0,i);
+						collection.comments = new Array();
 						collection.save(function(err){
 						if(err)
 						{

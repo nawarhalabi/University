@@ -33,7 +33,7 @@ exports.createSchema = function()
 {
 	var Schema = mongoose.Schema;
 	var images = new mongoose.Schema({
-	id: { type: String, required:true, index:{unique: true}},
+	id: { type: String, required:true },
 	name: {type: String, requiered: true},
 	uri: {type: String, required: true},
 	author: { type: String, required: true},

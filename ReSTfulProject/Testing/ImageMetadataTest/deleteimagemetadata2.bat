@@ -1,1 +1,0 @@
-curl.exe -i -X DELETE http://localhost:3000/collections/collection2_wang/images/image3/metadata

@@ -119,7 +119,7 @@ exports.get = function(req,res){
 							}
 							else
 							{	
-									if(image.comments==null)
+									if(image.comments==null || image.comments.length == 0)
 								{
 									status.status(404, res, {}, '');
 								}

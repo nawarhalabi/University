@@ -103,10 +103,23 @@ submission
 -------------------------------------------------------------------------------------------------------------------------
 *Instructions to test the web service:
 	
-	DB Server: start the mangodb (database) by running the mongodb.bat. This can be found in /mongodb-win32-x86_64-2.2.2/bin
-	HTTP Server: start the app.js by running the start.bat file in the root application directory.
-	Testing client:	 Open the http://localhost:3000/testPage.html and follow the instructions below. (You can alternatively use curl.exe and 
-	the *.bat files in the folder /testing). Please use the batch files in the order specified in the folder (each file is named with a number).
+	1- DB Server: start the mangodb (database) by running the startmongodb.bat (runnig a batch is done by starting a cmd pointing to it's directory
+		and then typing it's name and extention). This can be found in root directory of the Server.
+	
+	2- HTTP Server: start the app.js by running the startServer.bat file in the root application directory.
+	
+	3- Testing client: Open the http://localhost:3000/testPage.html and follow the instructions below. (You can alternatively use curl.exe and 
+		the *.bat files in the folder /testing). Please use the batch files in the order specified in the folder (each file is named with a number).
+	
+	4- Please check the file /Testing/createEverything.bat to see how to pass the json in the body and the json format we used. And also you'll see the headers
+		we pass to the server.
+
+	5- To work with comments (whose ids are automatically generated) you need to copy the generated ids from the client terminal (the one in which you've run the batches)
+		and create curl commands like this: curl.exe -i -X GET/POST/DELETE -H "accept:application/json" http:localhost:3000/collections/<collection id>/collectioncomments/<the id of the comment>
+		and for image comments: curl.exe -i -X GET/POST/DELETE -H "accept:application/json" http:localhost:3000/collections/<collection id>/collectioncomments/images/imagecomments/<the id of the comment>
+	
+	Notes: - on the server terminal you can see the request headers as they arrive.
+	       - in /Testing/JsonFiles you can check the json format that we send to the server. And they are also listed above in this document.
 
 *How to use the testing page:
 

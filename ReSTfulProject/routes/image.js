@@ -53,10 +53,11 @@ exports.add = function(req,res){//POST
 				{
 					if(collection !== null)
 					{
-						var imageQuery = imageModel.findOne({'id': newImage.id});
+						var imageQuery = imageModel.findOne({'collectionId': collection._id, 'id': newImage.id});
 						imageQuery.exec(function(err, image){
 							if(err)
 							{
+								console.log(err + image);
 								status.status(500, res, {}, '');
 							}
 							else

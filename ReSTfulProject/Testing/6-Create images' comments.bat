@@ -1,0 +1,3 @@
+echo "create images comments--------------------------------"
+curl.exe -i -X POST -H "content-type:application/json" -d @JsonFiles/icomment1.json http://localhost:3000/collections/collection1_nawar/images/my_image_id_1/imagecomments
+curl.exe -i -X POST -H "content-type:application/json" -d @JsonFiles/icomment2.json http://localhost:3000/collections/collection2_wang/images/my_image_id_2/imagecomments
